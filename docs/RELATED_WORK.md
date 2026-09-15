@@ -4,115 +4,120 @@ FusionMachine is intentionally built inside several mature research neighborhood
 
 ## 1. Dendrites as nonlinear computational subunits
 
-Poirazi, Brannon & Mel (2003), **“Pyramidal Neuron as Two-Layer Neural Network”**, modeled terminal dendritic branches as nonlinear subunits whose outputs are combined before final thresholding. DOI: `10.1016/S0896-6273(03)00149-1`.
+Poirazi, Brannon & Mel (2003), **“Pyramidal Neuron as Two-Layer Neural Network”**, modeled terminal dendritic branches as nonlinear subunits combined before a final output stage. DOI: `10.1016/S0896-6273(03)00149-1`.
 
 London & Häusser (2005), **“Dendritic Computation”**, review the broad evidence that dendrites implement linear and nonlinear elementary computations rather than acting only as passive cables. DOI: `10.1146/annurev.neuro.28.061604.135703`.
 
-Larkum, Zhu & Sakmann (1999), **“A new cellular mechanism for coupling inputs arriving at different cortical layers”**, showed a nonlinear interaction between distal dendritic input and back-propagating axonal activity (BAC firing). DOI: `10.1038/18686`.
+Larkum, Zhu & Sakmann (1999), **“A new cellular mechanism for coupling inputs arriving at different cortical layers”**, showed nonlinear interaction between distal dendritic input and back-propagating axonal activity. DOI: `10.1038/18686`.
 
-Gidon et al. (2020), **“Dendritic action potentials and computation in human layer 2/3 cortical neurons”**, reported graded dendritic calcium action potentials in human cortical neurons and showed that the measured dendritic nonlinearity can support linearly nonseparable input classification. DOI: `10.1126/science.aax6239`.
+Gidon et al. (2020), **“Dendritic action potentials and computation in human layer 2/3 cortical neurons”**, reported graded dendritic calcium action potentials in human cortical neurons and showed that the measured dendritic nonlinearity can support linearly nonseparable classification. DOI: `10.1126/science.aax6239`.
 
-Aizenbud et al. (2026), **“Dendritic morphology and synaptic nonlinearities enhance functional complexity in human cortical neurons”**, reported greater modeled functional complexity in human cortical pyramidal neurons and attributed important contributions to dendritic morphology and nonlinear NMDA signaling. DOI: `10.1073/pnas.2533168123`.
+Aizenbud et al. (2026), **“Dendritic morphology and synaptic nonlinearities enhance functional complexity in human cortical neurons”**, reported greater modeled functional complexity in human cortical pyramidal neurons and important contributions from morphology and nonlinear NMDA signaling. DOI: `10.1073/pnas.2533168123`.
 
-**Boundary:** these papers motivate thinking of a branched cell as a multi-stage nonlinear computer. FusionMachine does not establish that its abstract modes map onto specific branches, eigenmodes, ion channels, basket cells, or chandelier cells.
+**Boundary:** these papers motivate a branched cell as a multi-stage nonlinear computer. FusionMachine does not establish that its abstract resident modes map onto specific branches, eigenmodes or ion-channel mechanisms.
 
-## 2. Conditional computation and mixture of experts
+## 2. The AIS as output boundary and plastic compartment
 
-Conditional computation is an established neural-network idea: only some computation paths are activated for a given input or context. Sparsely gated mixture-of-experts systems make this explicit by maintaining many expert subnetworks and learning a router/gate that selects a sparse subset.
+Fréal & Hoogenraad (Neuron, 2025), **“The dynamic axon initial segment: From neuronal polarity to network homeostasis”**, DOI `10.1016/j.neuron.2025.01.004`, review the AIS as a specialized compartment between somatodendritic and axonal domains. They emphasize two broad functions: generation/modulation of action potentials and maintenance of neuronal polarity. The review also describes molecular heterogeneity along the AIS, including distinct proximal/distal channel organization, and emphasizes that an apparently stable AIS can undergo activity-dependent structural and functional remodeling.
 
-A canonical reference is Shazeer et al. (2017), **“Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer”**, arXiv:`1701.06538`.
+The review further discusses axo-axonic GABAergic innervation of the AIS, including chandelier-cell synapses in cortex and hippocampus, and notes activity-dependent plasticity of AIS structure and of chandelier-cell contacts.
 
-Related conditional-computation work includes Bengio et al. (2015), **“Conditional Computation in Neural Networks for faster models”**, arXiv:`1511.06297`.
+**Boundary:** FusionMachine uses this literature only to motivate separating resident somatodendritic state from an output/publication boundary. It does not show that the AIS implements the software gate in v2, that chandelier cells are literal permission bits, or that the synthetic event threshold captures AIS electrophysiology.
 
-**Boundary:** FusionMachine is not claiming to invent expert routing. Its narrower question is whether several computations can remain *resident as state inside one shared substrate* while the causal boundary performs context-dependent selection, and whether early collapse of those modes destroys useful counterfactual identity.
+## 3. Axon guidance, chemoaffinity, and target specificity
 
-A future benchmark must therefore include an explicit MoE/router attacker. If a FusionMachine gate merely rediscovers a standard MoE with worse engineering, that should be recorded as the result.
+Sperry's chemoaffinity hypothesis historically proposed that growing axons and targets possess molecular labels that contribute to specific connectivity. Modern axon-guidance work replaces a one-barcode-per-neuron picture with combinations of gradients, receptors, adhesion systems, intermediate cues, target recognition and later synapse selection/refinement.
 
-## 3. Multiplicative interactions and context gating
+Activity-dependent refinement is also established biological territory: initial molecularly guided connectivity can be modified by correlated activity and competition during development and experience.
 
-The exact v0 selector contains the bilinear term
+**Boundary:** FusionMachine v2's developmental rule
+
+```text
+score_ij = z(chemistry_ij) + beta*z(activity_ij)
+```
+
+is a synthetic complementary-coordinate experiment. It is not a molecular model of Eph/ephrin systems, growth cones, cell-adhesion codes, Hebbian refinement or real synaptogenesis. The result is computational: two imperfect information sources can jointly recover a better route graph than either source alone.
+
+## 4. Conditional computation and mixture of experts
+
+Conditional computation is established: only some computation paths are activated for a given input/context. Sparsely gated mixture-of-experts systems make this explicit with many experts and a learned router.
+
+A canonical reference is Shazeer et al. (2017), **“Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer”**, arXiv:`1701.06538`. Related work includes Bengio et al. (2015), **“Conditional Computation in Neural Networks for faster models”**, arXiv:`1511.06297`.
+
+**Boundary:** FusionMachine does not claim to invent routing or experts. Its question is whether several computations remain useful as continuously resident state while publication and downstream routing are separate causal stages.
+
+## 5. Multiplicative interactions and context gating
+
+The exact v0 selector contains
 
 ```text
 context * (B-A).
 ```
 
-Multiplicative interactions are old and widespread. Jayakumar et al. (ICLR 2020), **“Multiplicative Interactions and Where to Find Them”**, connect multiplicative interactions to gating, attention, hypernetworks, dynamic convolutions, information-stream fusion, and conditional computation.
+Multiplicative interactions are old and widespread. Jayakumar et al. (ICLR 2020), **“Multiplicative Interactions and Where to Find Them”**, connect them to gating, attention, hypernetworks, dynamic convolutions, fusion and conditional computation. Hypernetworks (Ha, Dai & Le, 2016, arXiv:`1609.09106`) are another nearby mechanism.
 
-FusionMachine therefore does **not** claim that the product term is novel. v0 uses it because the complete truth table gives a clean algebraic demonstration of why an additive/affine boundary cannot contextually select independent resident modes.
+**Boundary:** v0 uses a product term because it gives a clean algebraic separation from an affine attacker, not because multiplicative gating is novel.
 
-Hypernetworks are another close neighbor: Ha, Dai & Le (2016), **“HyperNetworks”**, arXiv:`1609.09106`, use one network to generate the parameters of another, giving context a multiplicative influence over computation.
+## 6. Algorithmic state and differentiable memory
 
-## 4. Algorithmic state and differentiable memory
+Neural Turing Machines (Graves, Wayne & Danihelka, 2014, arXiv:`1410.5401`) show that neural systems can learn algorithm-like procedures by coupling a controller to addressable external memory.
 
-Neural Turing Machines (Graves, Wayne & Danihelka, 2014, arXiv:`1410.5401`) showed that neural systems can learn algorithm-like procedures by coupling a controller to addressable external memory.
+This literature fences the phrase **algorithmic mode**. FusionMachine does not yet show program induction; its computations and route families are supplied by construction. The question is whether the continuing state of different procedures can remain separately resident and later be selected or routed without replaying lost history.
 
-That literature makes an important fence for the phrase “algorithmic mode.” FusionMachine does not yet show program induction. Its route computations are supplied by construction. The research question is whether separated recurrent modes can preserve the *state of different computations* and switch between them without losing the history each procedure needs.
+## 7. Recursive filtering, sufficient state, and predictive representations
 
-## 5. Recursive filtering, sufficient state, and predictive representations
+v1 is close to classical state estimation. Kalman (1960), **“A New Approach to Linear Filtering and Prediction Problems”**, DOI `10.1115/1.3662552`, formulates recursive state rather than replaying the full observation history.
 
-v1 is especially close to classical state estimation. Kalman (1960), **“A New Approach to Linear Filtering and Prediction Problems”**, formulates filtering recursively through a state-transition representation rather than replaying the full observation history. DOI: `10.1115/1.3662552`.
+Littman, Sutton & Singh (NeurIPS 2001), **“Predictive Representations of State”**, emphasize that dynamical state can be represented in multiple coordinates, including predictions of future observations.
 
-The conceptual point is older and broader than Kalman filtering: a well-chosen current state can act as a sufficient summary of the relevant past for continuing a computation. FusionMachine v1's leaky scalar is an extremely simple example of such a recursively maintained sufficient statistic.
+**Boundary:** v1 does not invent sufficient statistics, recursive filters or replay. Its measured result is the relation between a mode's persistence and how much omitted history still matters when reconstructing a suspended computation.
 
-Littman, Sutton & Singh (NeurIPS 2001 / NIPS 14), **“Predictive Representations of State”**, make the representational idea explicit in another direction: dynamical state can be represented by predictions of future observations rather than by a privileged hidden-state label. Their work is a useful warning that there are many valid coordinates for state; FusionMachine's named resident modes are only one possible coordinate system.
+## 8. Event-triggered communication and delta networks
 
-**Boundary:** v1 does not invent recursive state, sufficient statistics, state-space filtering, caching, or replay. Its narrower measured result is the exact relation between one mode's persistence and the amount of omitted history that matters when that mode has been suspended.
+Delta Networks (Neil, Lee, Delbruck & Liu, ICML 2017), **“Delta Networks for Optimized Recurrent Network Computation”**, exploit temporal stability by transmitting activation changes only when they exceed a threshold.
 
-## 6. Replay, event logs, and materialized state
+Event-triggered control, neuromorphic/event-based computation and asynchronous message-passing systems provide broader neighborhoods for the idea that resident state and traffic can differ.
 
-In software architecture, event-sourced systems deliberately retain event histories so current state can be reconstructed by replay, while materialized/projected state trades storage and continual update work for fast current queries. The analogy to v1 is structural rather than a claim of direct technical novelty.
+**Boundary:** FusionMachine's one-bit event is not a novelty claim. v2 asks what follows when event payload, source identity, route graph and receiving state are treated as separate information-bearing objects.
 
-A useful software-systems reference is Overeem et al. (2021), **“Improving observability in Event Sourcing systems”**, *Journal of Systems and Software* 181:111015, DOI `10.1016/j.jss.2021.111015`, which discusses event logs and replay in operational systems.
+## 9. Graph routing and message passing
 
-FusionMachine v1's resident-versus-replay accounting should therefore be read as a tiny dynamical version of a familiar systems tradeoff: maintain current derived state continuously, or retain enough history to rebuild it later.
+Graph neural networks, message-passing neural networks, actor systems and asynchronous distributed systems all make source/destination structure explicit. A message can be small because graph topology and endpoint identity already carry information about where it came from and where it goes.
 
-## 7. Resident state versus communication
+This is an important prior-art fence for the v2 phrase **address in matter**. The result is not that topology can route messages—that is elementary. The useful question is whether the same separation, combined with resident algorithmic state and nonlinear publication, creates a productive AI architecture under matched controls.
 
-Delta Networks (Neil, Lee, Delbruck & Liu, ICML 2017), **“Delta Networks for Optimized Recurrent Network Computation”**, transmit neural activations only when their change exceeds a threshold, exploiting temporal stability to reduce recurrent computation/communication.
+## 10. What FusionMachine has actually established
 
-FusionMachine inherits from the separate NewMachine/ActiveVectorNN line the idea that resident state and published traffic need not be identical. That is established territory around event-triggered and delta communication; the future question is what happens when resident state contains multiple computational modes and the publication boundary is itself context-dependent.
+### v0 — preserve computational identity
 
-## 8. What FusionMachine is actually testing
+Early blending can create an information-theoretic ambiguity that a later context cannot undo.
 
-The project should be judged on progressively stronger claims, not on the novelty of its ingredients.
+### v1 — preserve computational history
 
-### v0 claim — preserve computational identity
-
-```text
-preserve A and B separately
-        +
-nonlinear context interaction
-        ->
-select A or B exactly
-```
-
-while early collapse to `(A+B)/2` creates a provable information loss.
-
-### v1 claim — preserve computational history
-
-A dormant leaky computation may be kept current continuously, or reconstructed later from retained missed inputs. With bounded replay, switch-time error follows the mode's own persistence law. Full replay remains exact.
-
-The useful sentence is not “resident state beats replay.” It is:
+A suspended persistent computation requires retained missed history for exact reconstruction. Full replay is exact; resident state trades continuous work for readiness.
 
 > **Persistence is also a replay horizon.**
 
-### later target
+### v2 — separate state, publication and routing
 
-Only if stronger gates survive recurrent, MoE, and equal-capacity attackers should the project add:
+The same one-bit payload reaches different destinations under different route identities. Pooling route/source identity destroys that information; an explicit address oracle restores it. A synthetic chemistry+activity developmental rule recovers a better route graph than either cue alone. Publication suppression leaves resident state untouched, and route intervention changes downstream consequences while source state/events stay fixed.
 
-- genuinely different temporal algorithms per mode;
-- sparse publication and predictive receivers;
-- learned formation of computational modes;
-- local credit and slow operator rewriting;
-- physically branched / dendritic substrates;
-- biological interpretations.
+## 11. Novelty standard
 
-## 9. Novelty standard
+A useful eventual FusionMachine claim is **not** any of the following:
 
-A useful eventual claim would not be “neurons are two-layer networks,” “multiplicative gating works,” “experts can be routed,” “recursive state summarizes history,” or “state can be communicated sparsely.” Those are prior art.
+- neurons are two-layer networks;
+- multiplicative gating works;
+- experts can be routed;
+- recursive state summarizes history;
+- event-triggered communication is efficient;
+- topology carries source/destination identity;
+- chemoaffinity or activity-dependent refinement exists.
 
-The potentially distinctive object is instead:
+Those are established territories.
 
-> **a shared, persistent substrate that keeps several counterfactually distinct computations alive as resident modes, allows those modes to keep evolving even while behavior ignores them, and delays nonlinear/context-dependent causal selection until the output boundary.**
+The potentially distinctive object is the composition:
 
-Whether that object provides an advantage over generic recurrent state or explicit expert routing is the scientific question of this repository.
+> **a shared machine in which several computations remain live as resident state, a nonlinear boundary decides when one becomes public, the public token can be tiny because route identity is embodied in persistent structure, and local receiving dynamics determine what that routed event means next.**
+
+Whether that composition has a computational advantage over an equal-capacity generic recurrent model with learned routing remains the next scientific question.
