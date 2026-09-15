@@ -3,30 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FusionMachine — resident computation, causal event, material route</title>
-  <meta name="description" content="Interactive FusionMachine laboratory: resident computation, nonlinear publication, one-bit events and material routing.">
+  <title>FusionMachine — resident world dynamics and late relevance</title>
+  <meta name="description" content="Interactive FusionMachine laboratory: resident world dynamics, late relevance, sparse publication and material routing.">
   <link rel="stylesheet" href="web/style.css">
+  <link rel="stylesheet" href="web/v3.css">
 </head>
 <body>
 <main class="shell">
   <header class="hero">
     <div>
-      <p class="eyebrow">FUSIONMACHINE · V0 → V2</p>
-      <h1>The state can be rich.<br><span>The pulse can stay tiny.</span></h1>
-      <p class="lede">A resident computation keeps evolving locally. An AIS-like boundary decides whether it becomes public. The emitted event is only one bit; the axonal graph carries the destination.</p>
+      <p class="eyebrow">FUSIONMACHINE · V0 → V3</p>
+      <h1>Keep the world moving.<br><span>Apply relevance later.</span></h1>
+      <p class="lede">Resident computations keep transforming the world even when behavior is looking elsewhere. Current relevance selects what becomes causal; a tiny event can then be routed through persistent structure.</p>
     </div>
     <div class="result-card">
-      <div class="result-number">1 bit</div>
-      <div class="result-label">event payload in v2</div>
-      <div class="result-vs">The address lives in the route.</div>
+      <div class="result-number">1,088×</div>
+      <div class="result-label">lower first-switch MSE in the frozen v3 fair fight</div>
+      <div class="result-vs">Important: Fusion also fit training better. The architecture claim remains confounded.</div>
     </div>
   </header>
 
   <section class="equation-strip" aria-label="FusionMachine architecture">
-    <div><span>resident</span> h(t)</div><div class="arrow">→</div>
+    <div><span>world</span> h(t)</div><div class="arrow">→</div>
+    <div><span>relevance</span> c(t)</div><div class="arrow">→</div>
     <div><span>AIS</span> e∈{0,1}</div><div class="arrow">→</div>
-    <div><span>axon</span> W,d</div><div class="arrow">→</div>
-    <div><span>target</span> hⱼ(t+d)</div>
+    <div><span>route</span> W,d</div><div class="arrow">→</div>
+    <div><span>next state</span> hⱼ</div>
   </section>
 
   <section class="card spine-card">
@@ -34,7 +36,8 @@
     <div class="spine-flow">
       <div><b>v0</b><span>keep different computations separate</span></div>
       <i>→</i><div><b>v1</b><span>keep their history resident</span></div>
-      <i>→</i><div class="active-spine"><b>v2</b><span>route one-bit events through matter</span></div>
+      <i>→</i><div><b>v2</b><span>route one-bit events through matter</span></div>
+      <i>→</i><div class="active-spine"><b>v3</b><span>keep fast relevance out of persistent world dynamics</span></div>
     </div>
   </section>
 
@@ -43,19 +46,14 @@
       <div class="card-kicker">V0 · SAME ANSWER, DIFFERENT ALGORITHM</div>
       <h2>Preserve the computations before context arrives</h2>
       <div class="controls">
-        <label for="x0">x₀ · direct cue <output id="x0-out">-1</output></label>
-        <input id="x0" type="range" min="-1" max="1" step="2" value="-1">
-        <label for="x1">x₁ · relation cue 1 <output id="x1-out">-1</output></label>
-        <input id="x1" type="range" min="-1" max="1" step="2" value="-1">
-        <label for="x2">x₂ · relation cue 2 <output id="x2-out">-1</output></label>
-        <input id="x2" type="range" min="-1" max="1" step="2" value="-1">
-        <label for="context">context · publish <output id="context-out">A</output></label>
-        <input id="context" type="range" min="-1" max="1" step="2" value="-1">
+        <label for="x0">x₀ · direct cue <output id="x0-out">-1</output></label><input id="x0" type="range" min="-1" max="1" step="2" value="-1">
+        <label for="x1">x₁ · relation cue 1 <output id="x1-out">-1</output></label><input id="x1" type="range" min="-1" max="1" step="2" value="-1">
+        <label for="x2">x₂ · relation cue 2 <output id="x2-out">-1</output></label><input id="x2" type="range" min="-1" max="1" step="2" value="-1">
+        <label for="context">context · publish <output id="context-out">A</output></label><input id="context" type="range" min="-1" max="1" step="2" value="-1">
       </div>
       <div class="button-row"><button id="correlate">Restore correlated world</button><button id="autoplay" class="accent">Auto-play truth table</button></div>
       <div id="world-status" class="world-status"></div>
     </div>
-
     <div class="machine-card card">
       <div class="card-kicker">V0 · RESIDENT MODES</div>
       <div class="mode-row">
@@ -76,11 +74,8 @@
   </section>
 
   <section id="v1-lab" class="v1-lab card">
-    <div class="v1-head"><div><div class="card-kicker">V1 · RESIDENT ALGORITHMIC STATE</div><h2>A dormant computation still has a history.</h2><p>Resident state pays continuous local work. Lazy state must retain and replay the missed history when context returns.</p></div><div class="v1-equation"><code>hₜ = αhₜ₋₁ + (1−α)uₜ</code><code>RMSE(K) ∝ αᴷ</code></div></div>
-    <div class="v1-controls">
-      <label for="v1-alpha">persistence α <output id="v1-alpha-out">0.95</output></label><input id="v1-alpha" type="range" min="0.50" max="0.98" step="0.01" value="0.95">
-      <label for="v1-k">remembered tail K / 80 <output id="v1-k-out">16</output></label><input id="v1-k" type="range" min="0" max="80" step="1" value="16">
-    </div>
+    <div class="v1-head"><div><div class="card-kicker">V1 · RESIDENT ALGORITHMIC STATE</div><h2>A dormant computation still has a history.</h2><p>Resident state pays continuous local work. Lazy state must retain and replay missed history when context returns.</p></div><div class="v1-equation"><code>hₜ = αhₜ₋₁ + (1−α)uₜ</code><code>RMSE(K) ∝ αᴷ</code></div></div>
+    <div class="v1-controls"><label for="v1-alpha">persistence α <output id="v1-alpha-out">0.95</output></label><input id="v1-alpha" type="range" min="0.50" max="0.98" step="0.01" value="0.95"><label for="v1-k">remembered tail K / 80 <output id="v1-k-out">16</output></label><input id="v1-k" type="range" min="0" max="80" step="1" value="16"></div>
     <div id="v1-tape" class="v1-tape"></div><div class="v1-legend"><span><i class="forgotten-dot"></i> omitted</span><span><i class="remembered-dot"></i> retained for replay</span></div>
     <div class="v1-metrics"><div><span>switch RMSE</span><strong id="v1-rmse"></strong></div><div><span>fraction of zero-history</span><strong id="v1-ratio"></strong></div><div><span>K for ≤10%</span><strong id="v1-horizon"></strong></div><div><span>switch-time work</span><strong id="v1-switch-cost"></strong></div></div>
     <div class="v1-policy-grid"><div class="v1-policy resident-policy"><span>RESIDENT</span><strong>pay while time passes</strong><p id="v1-resident-status"></p></div><div class="v1-policy lazy-policy"><span>REPLAY</span><strong>pay when context switches</strong><p id="v1-lazy-status"></p></div></div>
@@ -88,59 +83,57 @@
   </section>
 
   <section id="v2-lab" class="v2-lab card">
-    <div class="v2-head">
-      <div><div class="card-kicker">V2 · DENDRITE → AIS → AXON → DENDRITE</div><h2>The pulse is tiny because the machine carries the address.</h2><p>The resident dendrite is rich state. The AIS only commits a one-bit event. The source-specific axonal route decides which downstream dendritic compartment receives the write.</p></div>
-      <div class="v2-score"><strong>0.599</strong><span>chemistry + activity route recovery</span><small>vs .220 chemistry · .263 activity · .077 random</small></div>
-    </div>
-
+    <div class="v2-head"><div><div class="card-kicker">V2 · DENDRITE → AIS → AXON → DENDRITE</div><h2>The pulse is tiny because the machine carries the address.</h2><p>The resident dendrite is rich state. The AIS only commits a one-bit event. The source-specific axonal route decides which downstream dendritic compartment receives the write.</p></div><div class="v2-score"><strong>0.599</strong><span>chemistry + activity route recovery</span><small>vs .220 chemistry · .263 activity · .077 random</small></div></div>
     <div class="v2-controls">
       <label>source computation<select id="v2-source"><option value="0">axon A0</option><option value="1">axon A1</option><option value="2">axon A2</option><option value="3">axon A3</option></select></label>
       <label>route material<select id="v2-route-mode"><option value="learned">chemistry + activity</option><option value="chemistry">chemistry only</option><option value="activity">activity only</option><option value="shuffled">shuffled routes</option></select></label>
       <label class="toggle"><input id="v2-ais-gate" type="checkbox"> suppress AIS publication</label>
       <div class="button-row"><button id="v2-reroute">Reroute one axon</button><button id="v2-step" class="accent">Step machine</button><button id="v2-autoplay">Auto-play</button></div>
     </div>
-
     <div class="v2-machine">
-      <div class="v2-column">
-        <span class="v2-stage">DENDRITIC RESIDENT</span>
-        <div class="v2-resident"><small>source state</small><strong id="v2-source-state">0.00</strong><div class="state-bar"><i id="v2-source-bar"></i></div><p>Local state keeps moving even when publication is blocked.</p></div>
-      </div>
-
-      <div class="v2-column v2-ais-column">
-        <span class="v2-stage">AIS · COMMIT</span>
-        <div class="ais-orb" id="v2-ais-orb"><span id="v2-pulse">0</span></div>
-        <code>e = 1[h ≥ θ]</code>
-        <p id="v2-ais-status">below threshold</p>
-      </div>
-
-      <div class="v2-column v2-axon-column">
-        <span class="v2-stage">AXONAL ROUTING FABRIC</span>
-        <div class="axon-readout"><span>payload</span><strong id="v2-payload">0 · one-bit event</strong></div>
-        <div class="axon-readout"><span>material identity</span><strong id="v2-axon-id">axon A0</strong></div>
-        <div class="axon-track"><i id="v2-moving-pulse"></i><b id="v2-route-label">A0 → D0</b></div>
-        <p class="route-sentence">The <strong>address lives in the route</strong>, not in the pulse amplitude.</p>
-      </div>
-
-      <div class="v2-column">
-        <span class="v2-stage">TARGET DENDRITES</span>
-        <div id="v2-targets" class="v2-targets">
-          <div data-target="0"><span>D0</span><strong>0.00</strong></div><div data-target="1"><span>D1</span><strong>0.00</strong></div><div data-target="2"><span>D2</span><strong>0.00</strong></div><div data-target="3"><span>D3</span><strong>0.00</strong></div>
-        </div>
-      </div>
+      <div class="v2-column"><span class="v2-stage">DENDRITIC RESIDENT</span><div class="v2-resident"><small>source state</small><strong id="v2-source-state">0.00</strong><div class="state-bar"><i id="v2-source-bar"></i></div><p>Local state keeps moving even when publication is blocked.</p></div></div>
+      <div class="v2-column v2-ais-column"><span class="v2-stage">AIS · COMMIT</span><div class="ais-orb" id="v2-ais-orb"><span id="v2-pulse">0</span></div><code>e = 1[h ≥ θ]</code><p id="v2-ais-status">below threshold</p></div>
+      <div class="v2-column v2-axon-column"><span class="v2-stage">AXONAL ROUTING FABRIC</span><div class="axon-readout"><span>payload</span><strong id="v2-payload">0 · one-bit event</strong></div><div class="axon-readout"><span>material identity</span><strong id="v2-axon-id">axon A0</strong></div><div class="axon-track"><i id="v2-moving-pulse"></i><b id="v2-route-label">A0 → D0</b></div><p class="route-sentence">The <strong>address lives in the route</strong>, not in the pulse amplitude.</p></div>
+      <div class="v2-column"><span class="v2-stage">TARGET DENDRITES</span><div id="v2-targets" class="v2-targets"><div data-target="0"><span>D0</span><strong>0.00</strong></div><div data-target="1"><span>D1</span><strong>0.00</strong></div><div data-target="2"><span>D2</span><strong>0.00</strong></div><div data-target="3"><span>D3</span><strong>0.00</strong></div></div></div>
     </div>
-
-    <div class="v2-bottom-grid">
-      <div><span class="v2-stage">CAUSAL EVENT LOG</span><ol id="v2-log" class="v2-log"><li>Step the machine to emit an event.</li></ol></div>
-      <div class="v2-result-panel"><span>FROZEN V2 CONTROLS</span><b>intact route 1.000</b><b>pooled identity 0.125</b><b>shuffled route 0.000</b><b>digital-address oracle 1.000</b></div>
-    </div>
+    <div class="v2-bottom-grid"><div><span class="v2-stage">CAUSAL EVENT LOG</span><ol id="v2-log" class="v2-log"><li>Step the machine to emit an event.</li></ol></div><div class="v2-result-panel"><span>FROZEN V2 CONTROLS</span><b>intact route 1.000</b><b>pooled identity 0.125</b><b>shuffled route 0.000</b><b>digital-address oracle 1.000</b></div></div>
   </section>
 
-  <section class="boundary-note"><strong>Claim boundary:</strong> v0–v2 are synthetic computational experiments. This is <strong>not a biological-neuron claim</strong>, not evidence that dendrites literally store arbitrary programs, and not a claim that chemical guidance is captured by one vector score. The attached AIS literature motivates separating resident state, publication, and routing; the checked-in Python receipts are the scientific authority.</section>
+  <section id="v3-lab" class="v3-lab card">
+    <div class="v3-head">
+      <div><div class="card-kicker">V3 · FAIR FIGHT · FOUR STATES VS FOUR STATES</div><h2>Does the world state survive when relevance suddenly moves?</h2><p>Two hidden nonlinear processes keep evolving. Training looks at one for long blocks. Test switches attention rapidly or returns after 48 dormant steps. The generic RNN gets the same state/routing/training budget and <strong>more</strong> recurrent/readout parameters.</p></div>
+      <div class="v3-verdict"><span>FROZEN CLASSIFICATION</span><strong>Readiness advantage — confounded</strong><small>Fusion also achieved ~32× lower training-query MSE, so v3 is not yet a clean architecture-superiority claim.</small></div>
+    </div>
 
-  <footer><a href="README.md">README</a><a href="PAPER.md">paper</a><a href="RESULTS_V0.md">v0</a><a href="RESULTS_V1.md">v1</a><a href="RESULTS_V2.md">v2</a><a href="docs/RELATED_WORK.md">related work</a></footer>
+    <div class="v3-budget-grid" id="v3-budget">
+      <div class="v3-budget"><span>state scalars</span><strong>4 = 4</strong></div>
+      <div class="v3-budget"><span>route params</span><strong>28 = 28</strong></div>
+      <div class="v3-budget"><span>train episodes</span><strong>96 = 96</strong></div>
+      <div class="v3-budget"><span>updates</span><strong>1200 = 1200</strong></div>
+      <div class="v3-budget"><span>non-route params</span><strong>30 vs 46</strong></div>
+    </div>
+
+    <div class="v3-versus">
+      <article class="v3-side fusion"><div class="card-kicker">FUSION · LATE RELEVANCE</div><h3>Resident world dynamics do not receive current context.</h3><div class="v3-metrics"><div class="v3-metric"><span>first-switch MSE</span><strong>0.0000152</strong></div><div class="v3-metric"><span>48-step return error</span><strong>0.002981</strong></div><div class="v3-metric"><span>latent-world R²</span><strong>0.999822</strong></div><div class="v3-metric"><span>sparse receiver MSE</span><strong>0.192786</strong></div></div></article>
+      <article class="v3-side generic"><div class="card-kicker">GENERIC · CONTEXT INSIDE RECURRENCE</div><h3>Dense four-state recurrence can use relevance at every update.</h3><div class="v3-metrics"><div class="v3-metric"><span>first-switch MSE</span><strong>0.0165393</strong></div><div class="v3-metric"><span>48-step return error</span><strong>0.101834</strong></div><div class="v3-metric"><span>latent-world R²</span><strong>0.888666</strong></div><div class="v3-metric"><span>sparse receiver MSE</span><strong>0.201617</strong></div></div></article>
+    </div>
+
+    <div class="v3-ratio"><strong>≈1,088×</strong><p>lower first-post-switch MSE for Fusion in this frozen regime. But the primary comparison remains confounded by the better Fusion training fit.</p></div>
+
+    <div class="v3-controls-grid" id="v3-controls">
+      <div class="v3-control"><span>LEAK RELEVANCE INTO FUSION STATE</span><strong>0.0001554</strong><em>~10.2× worse switch MSE</em></div>
+      <div class="v3-control"><span>REMOVE RELEVANCE FROM GENERIC STATE</span><strong>0.0002358</strong><em>~70× better switch MSE · R² 0.9974</em></div>
+      <div class="v3-control"><span>DENSE FUSION RECURRENCE, NO RELEVANCE</span><strong>0.00005745</strong><em>dense recurrence itself does not erase readiness</em></div>
+    </div>
+
+    <div class="v3-wall"><span>V3 WALL SENTENCE</span><strong>State is not relevance.</strong><p>The world can keep changing while behavior looks elsewhere. A fast-changing question need not rewrite the state whose job is to stay ready for future questions.</p></div>
+    <div class="v3-confound"><strong>Scientific fence:</strong> eight deterministic seeds are not a significance study; the teacher is synthetic; the vanilla RNN is not the strongest recurrent baseline; and Fusion fit training better. The next gate must close that optimization confound with loss-matched checkpoints and stronger gated attackers.</div>
+  </section>
+
+  <section class="boundary-note"><strong>Claim boundary:</strong> v0–v3 are synthetic computational experiments. They are <strong>not biological-neuron claims</strong>, not evidence that dendrites literally store arbitrary programs, and not evidence that basket/chandelier cells implement the exact software decomposition. Biology motivates sharper interventions; checked-in receipts are the scientific authority.</section>
+
+  <footer><a href="README.md">README</a><a href="PAPER.md">paper</a><a href="RESULTS_V0.md">v0</a><a href="RESULTS_V1.md">v1</a><a href="RESULTS_V2.md">v2</a><a href="RESULTS_V3.md">v3 fair fight</a><a href="docs/RELATED_WORK.md">related work</a></footer>
 </main>
-<script src="web/app.js" defer></script>
-<script src="web/v1.js" defer></script>
-<script src="web/v2.js" defer></script>
+<script src="web/app.js" defer></script><script src="web/v1.js" defer></script><script src="web/v2.js" defer></script>
 </body>
 </html>
