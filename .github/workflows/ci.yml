@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, fusion-v0, fusion-v1-resident-state]
+    branches: [main, fusion-v0, fusion-v1-resident-state, fusion-v2-routing-fabric]
   pull_request:
 
 jobs:
@@ -27,3 +27,5 @@ jobs:
           cmp /tmp/v0.json results/v0.json
           python -m experiments.run_v1 --out /tmp/v1.json
           cmp /tmp/v1.json results/v1.json
+          python -m experiments.run_v2 --out /tmp/v2.json
+          cmp /tmp/v2.json results/v2.json
