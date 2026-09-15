@@ -1,0 +1,159 @@
+{
+  "address_in_matter": {
+    "digital_address_oracle_accuracy": 1.0,
+    "intact_accuracy": 1.0,
+    "intact_targets": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "payload_bits": 1,
+    "pooled_source_accuracy": 0.125,
+    "pooled_targets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "shuffled_route_accuracy": 0.0,
+    "shuffled_targets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0
+    ],
+    "source_count": 8
+  },
+  "ais_suppression": {
+    "baseline_events": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "baseline_states": [
+      0.5,
+      0.75,
+      0.875,
+      0.9375,
+      0.96875,
+      0.984375
+    ],
+    "first_post_suppression_event": 1,
+    "resident_max_abs_difference": 0.0,
+    "suppressed_event_count": 0,
+    "suppressed_events": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "suppressed_states": [
+      0.5,
+      0.75,
+      0.875,
+      0.9375,
+      0.96875,
+      0.984375
+    ],
+    "suppression_window": [
+      1,
+      4
+    ]
+  },
+  "async_chain": {
+    "events": [
+      {
+        "arrival_time": 1,
+        "emit_time": 0,
+        "source": 0,
+        "target": 1,
+        "weight": 1.0
+      },
+      {
+        "arrival_time": 3,
+        "emit_time": 1,
+        "source": 1,
+        "target": 2,
+        "weight": 1.0
+      },
+      {
+        "arrival_time": 4,
+        "emit_time": 3,
+        "source": 2,
+        "target": 3,
+        "weight": 1.0
+      },
+      {
+        "arrival_time": 7,
+        "emit_time": 4,
+        "source": 3,
+        "target": 4,
+        "weight": 1.0
+      }
+    ],
+    "final_states": [
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "fired": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "development": {
+    "activity_only_graph_accuracy": 0.2630208333333333,
+    "activity_only_routing_accuracy": 0.2630208333333333,
+    "chemistry_only_graph_accuracy": 0.22005208333333334,
+    "chemistry_only_routing_accuracy": 0.22005208333333334,
+    "combined_graph_accuracy": 0.5989583333333334,
+    "combined_routing_accuracy": 0.5989583333333334,
+    "random_graph_accuracy": 0.07682291666666666,
+    "seed_count": 64,
+    "shuffled_activity_graph_accuracy": 0.19010416666666666
+  },
+  "reroute": {
+    "downstream_target_changed": true,
+    "left_targets": [
+      1,
+      1,
+      1
+    ],
+    "right_targets": [
+      2,
+      2,
+      2
+    ],
+    "source_event_trace": [
+      0,
+      1,
+      0,
+      1,
+      1
+    ],
+    "source_event_trace_identical": true
+  }
+}

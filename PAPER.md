@@ -1,375 +1,329 @@
-# FusionMachine: Separated Computational Modes, Resident Algorithmic State, and a Nonlinear Causal Boundary
+# FusionMachine: Resident Computational Modes, Causal Publication, and Material Routing
 
 ## Abstract
 
-FusionMachine studies a simple architectural question: what changes when a vector is allowed to contain the states of several distinct computations, rather than a single blended representation, and context-dependent nonlinear selection is delayed until an output boundary?
+FusionMachine asks what changes when computation, publication, and routing are treated as different variables rather than collapsed into one activation. v0 shows that two counterfactually distinct computations can be behaviorally indistinguishable in an ordinary world yet require separate resident identities once context changes. v1 makes those computations stateful and shows that persistence sets the history required to reconstruct a suspended mode. v2 adds a low-dimensional causal boundary and a material routing graph: the event payload is one bit, while source/axon identity and route connectivity determine which downstream resident computation is changed next.
 
-v0 gives an exact static construction. A direct computation `A=x0` and a relational computation `B=x1*x2` are behaviorally indistinguishable in a correlated world where `x0=x1*x2`. Once that relation is broken, a context bit must select A or B. Keeping `[A,B]` separate permits exact selection through one multiplicative interaction. The best affine readout of `[A,B,context]` has MSE `0.5` and 75% sign accuracy, and collapsing to `(A+B)/2` creates an explicit information-theoretic ambiguity with the same aggregate result.
+The v2 synthetic controls give perfect routing with intact material identity, 1/8 accuracy after pooling source identity, zero accuracy under a cyclic route shuffle, and perfect performance when a privileged digital address is appended to the pulse. A separate developmental control combines an imperfect coarse chemical cue with complementary activity alignment; across 64 deterministic seeds the combined graph reaches 0.598958 routing accuracy versus 0.220052 for chemistry alone, 0.263021 for activity alone, and 0.076823 for random wiring. AIS-like suppression blocks all outward events while leaving the resident trajectory unchanged, and a pure route intervention changes downstream targets while the source state and bit train remain fixed.
 
-v1 makes each route stateful. A dormant leaky computation can either be kept resident or suspended and reconstructed later from retained history. For an 80-step hidden interval, bounded replay has a closed-form switch-error variance. Across 4,096 deterministic random tapes and four persistence values, measured replay RMSE matches the analytic law to within 1.664% at the worst nonzero point. The number of recent steps needed to reduce reconstruction RMSE to 10% of the zero-history value rises from 4 at `alpha=0.50` to 75 at `alpha=0.98`. Thus the same persistence that preserves old information also lengthens the history needed to reconstruct a suspended computation.
-
-These experiments do not show that biological dendrites contain arbitrary programs, nor that FusionMachine outperforms standard recurrent or mixture-of-experts systems. They establish a narrower progression: preserve computational identity before context arrives; when those computations have history, preserve their sufficient state or the history needed to recover it.
+These experiments do not establish a biological theory of dendrites, axons, or the AIS. They establish a computational decomposition that can now be attacked by equal-capacity recurrent and learned-routing alternatives.
 
 ## 1. Motivation
 
-A conventional neural representation is usually described as data: features, activations, embeddings, or hidden state. But a state variable in a dynamical machine can also be the partially executed state of a computation. If several such computations coexist, immediate averaging may destroy a distinction that becomes important only after a later context or intervention.
-
-This motivates three separations:
+A conventional point-neuron abstraction tends to blur several jobs together:
 
 ```text
-resident computation    what continues to exist internally
-contextual fusion       which resident distinction matters now
-causal publication      what becomes behavior / downstream influence
+state / computation
+integration
+output nonlinearity
+communication
+routing
 ```
 
-The motivating biological image is a branched cell whose local states coexist before nonlinear somatic/AIS integration, but the experiments here are ordinary digital constructions. The biological analogy supplies questions, not validation.
+FusionMachine separates them:
 
-## 2. v0 — same answer, different algorithm
+```text
+resident computation
+        ↓
+nonlinear causal publication
+        ↓
+low-dimensional event
+        ↓
+material routing graph
+        ↓
+local write into another resident computation
+```
 
-### 2.1 Two computations
+The neuron analogy supplies a useful physical picture: dendritic state can be richer than the spike, the AIS can act as a publication boundary, and the axonal/synaptic structure can carry route identity. The experiments are digital and synthetic; biology motivates the questions rather than validating the answers.
+
+## 2. v0 — computational identity before context
 
 Let
 
 ```text
-x0, x1, x2 in {-1,+1}
+A(x)=x0
+B(x)=x1*x2
 ```
 
-and define
+and first restrict the observed world so that
 
 ```text
-A(x) = x0
-B(x) = x1*x2.
+x0=x1*x2.
 ```
 
-They are counterfactually distinct: A depends on one direct cue, while B depends on a relation between two other cues.
+A and B then agree on every observed state even though they are counterfactually different computations. After breaking that correlation, context `c∈{-1,+1}` selects which computation should become behavior.
 
-### 2.2 Correlated world
-
-Impose
+Keeping the resident representation
 
 ```text
-x0 = x1*x2.
+z=[A,B]
 ```
 
-Then `A(x)=B(x)` for every observed state. A behavior-only observer cannot infer which computation generated the answer.
-
-### 2.3 Intervention world
-
-Remove the constraint and allow all eight input triples. Add context
-
-```text
-c in {-1,+1}
-```
-
-with target
-
-```text
-c=-1 -> y=A
-c=+1 -> y=B.
-```
-
-There are 16 complete intervention rows. The separated resident representation is
-
-```text
-z = [A,B].
-```
-
-### 2.4 Exact nonlinear boundary
-
-The selector is
+permits the exact selector
 
 ```text
 y = 0.5*(A+B) + 0.5*c*(B-A).
 ```
 
-The first term is the context-free average. The second is a multiplicative context-by-mode interaction. It switches the causal meaning of the same resident vector without erasing either coordinate.
+The complete 16-row intervention table gives:
 
-## 3. v0 attackers
-
-### 3.1 Best affine readout
-
-Consider
-
-```text
-y_hat = w0 + wA*A + wB*B + wc*c.
-```
-
-On the complete symmetric truth table the interaction `c*(B-A)` lies outside the affine feature span `{1,A,B,c}`. Least squares returns
-
-```text
-y_linear = 0.5*A + 0.5*B
-```
-
-with context coefficient zero. The residual is
-
-```text
-r = 0.5*c*(B-A).
-```
-
-Since A and B disagree on half the rows, the exact mean squared error is `0.5`; with a fixed sign tie rule, accuracy is `0.75`.
-
-### 3.2 Early collapse
-
-Suppose the machine destroys computational identity and keeps only
-
-```text
-r = (A+B)/2.
-```
-
-When A and B disagree, `r=0` regardless of which computation carries +1 or -1. The frozen witness is
-
-```text
-A=-1, B=+1, c=-1 -> target=-1
-A=+1, B=-1, c=-1 -> target=+1.
-```
-
-Both expose `(r,c)=(0,-1)`. No deterministic downstream function of the collapsed state can solve both cases. The complete-data optimum again has MSE `0.5` and sign accuracy `0.75`.
-
-### 3.3 Factorized calibration
-
-If the correct nonlinear basis is supplied,
-
-```text
-y = w_sum*(A+B) + w_gate*c*(B-A),
-```
-
-one agreement row and one disagreement row identify
-
-```text
-w_sum = 0.5
-w_gate = 0.5,
-```
-
-which then solves all 16 rows exactly. This is a representation-reuse diagnostic, not a general few-shot-learning result.
-
-### 3.4 v0 result
-
-| model | MSE | sign accuracy |
+| model | MSE | accuracy |
 |---|---:|---:|
 | nonlinear separated boundary | **0.000000** | **1.000** |
-| affine separated attacker | 0.500000 | 0.750 |
-| collapsed full-data attacker | 0.500000 | 0.750 |
-| two-row calibrated factorized boundary | **0.000000** | **1.000** |
+| best affine separated readout | 0.500000 | 0.750 |
+| full-data decoder after collapse | 0.500000 | 0.750 |
 
-v0 therefore earns:
+The collapse failure has an explicit information witness: two states share the same collapsed `(A+B)/2` and the same context while requiring opposite outputs.
 
-> **Preserving computational identity until context arrives can be necessary; an earlier collapse can destroy that identity irreversibly.**
+v0 therefore earns only the narrow statement:
 
-## 4. v1 — from algorithm output to algorithmic state
+> **Preserving computational identity until context arrives can matter; early blending can destroy it irreversibly.**
 
-v0 still stores only scalar outputs of hand-defined computations. v1 asks what happens when each route has temporal state.
+## 3. v1 — computational history must also survive
 
-For route drive `u_t`, define
+v1 gives a route continuing state
 
 ```text
 h_t = alpha*h_(t-1) + (1-alpha)*u_t.
 ```
 
-The two route drives retain the v0 semantics:
-
-```text
-uA_t = x0_t
-uB_t = x1_t*x2_t.
-```
-
-Now the resident vector is
-
-```text
-z_t = [hA_t, hB_t]
-```
-
-and the same causal boundary can select either continuing state:
-
-```text
-y_t = 0.5*(hA_t+hB_t) + 0.5*c_t*(hB_t-hA_t).
-```
-
-The stronger claim is not that the coordinate *names* an algorithm, but that it contains a sufficient state from which that computation can continue correctly.
-
-## 5. Resident versus lazy computation
-
-Consider an 80-step interval during which context selects A while hidden B-drives continue to occur. Every policy knows the same B-state at the beginning of the gap.
-
-### Resident dual
-
-B is updated on every hidden step. At the switch to B, its state is already current.
-
-### Lazy zero-history
-
-B is suspended. The known boundary state is decayed correctly across the gap, but all missed B-drives are unknown and therefore omitted.
-
-### Bounded replay K
-
-The machine stores only the last `K` missed B-drives. At switch time it analytically decays the known boundary state across the full gap and adds the exact recurrence contributions of those retained drives.
-
-### Full replay
-
-`K=N=80` stores every missed drive and exactly reproduces resident B. This is a deliberately privileged attacker and prevents the experiment from pretending that continuous resident computation creates information from nothing.
-
-## 6. Closed-form replay error
-
-Let the hidden dormant drives be iid Rademacher variables. If only the last `K` of `N` missed drives are retained, the omitted contribution is
-
-```text
-e = (1-alpha) * sum_(r=K)^(N-1) alpha^r u_(N-r).
-```
-
-Because the drives have zero mean and unit variance,
-
-```text
-E[e] = 0
-```
-
-and
+A dormant route can either remain resident or stop updating and later reconstruct itself from retained missed drives. If only the last `K` of `N` missed iid ±1 drives are retained, the omitted contribution has
 
 ```text
 Var[e]
- = (1-alpha)^2 * sum_(r=K)^(N-1) alpha^(2r)
  = (1-alpha)^2 * alpha^(2K)
    * (1-alpha^(2(N-K))) / (1-alpha^2).
 ```
 
-The predicted switch RMSE is the square root of this expression. For a gap long compared with the mode lifetime, the dominant dependence is approximately
+Across 4,096 deterministic tapes and `alpha∈{.50,.80,.95,.98}`, the simulated replay RMSE follows the analytic law. For an 80-step gap, the smallest `K` giving at most 10% of zero-history error is:
 
-```text
-RMSE(K) proportional to alpha^K.
-```
-
-This yields a direct conceptual bridge to modal forgetting: the mode's own persistence determines how far into the missed past one must reach to reconstruct it.
-
-## 7. v1 experiment
-
-We sample 4,096 deterministic independent hidden tapes of length 80 and sweep
-
-```text
-alpha = 0.50, 0.80, 0.95, 0.98
-K     = 0, 4, 8, 16, 32, 64, 80.
-```
-
-The Monte Carlo estimator computes the exact omitted-prefix contribution directly, avoiding catastrophic cancellation once replay error becomes tiny.
-
-Across every nonzero sweep point, the largest relative difference between measured and analytic RMSE is **1.664%**, at `alpha=0.98, K=4`.
-
-### 7.1 Primary alpha=0.95 curve
-
-| K | measured RMSE | analytic RMSE |
-|---:|---:|---:|
-| 0 | 0.160939 | 0.160106 |
-| 4 | 0.131933 | 0.130399 |
-| 8 | 0.106385 | 0.106199 |
-| 16 | 0.070331 | 0.070427 |
-| 32 | 0.030810 | 0.030906 |
-| 64 | 0.005413 | 0.005395 |
-| 80 | **0.000000** | **0.000000** |
-
-### 7.2 Persistence sets the reconstruction horizon
-
-Define the replay horizon as the smallest `K` whose analytic RMSE is at most 10% of the zero-history RMSE.
-
-| alpha | K required out of 80 |
+| alpha | K / 80 |
 |---:|---:|
-| 0.50 | **4** |
-| 0.80 | **11** |
-| 0.95 | **45** |
-| 0.98 | **75** |
+| .50 | 4 |
+| .80 | 11 |
+| .95 | 45 |
+| .98 | 75 |
 
-This gives the compact result:
+Hence:
 
 > **Persistence is also a replay horizon.**
 
-A rapidly forgetting computation can be recovered from a short recent tail because older events no longer matter. A slowly forgetting computation preserves older distinctions, and therefore suspending it makes those same old events necessary for accurate reconstruction.
+Full replay is exact. v1 is therefore a readiness/storage/scheduling result, not an efficiency theorem.
 
-## 8. Computation has not disappeared — it moved in time
+## 4. v2 — event payload and route identity are different information
 
-The resident and full-replay policies perform the same recurrence work at different times.
+v2 adds the outward half of the machine.
 
-For the 80-step dormant interval:
-
-| policy | dormant updates during gap | hidden drives stored | switch replay updates | current state scalars |
-|---|---:|---:|---:|---:|
-| resident dual | **80** | **0** | **0** | 1 |
-| lazy full replay | **0** | **80** | **80** | 1 |
-
-Thus v1 is not an efficiency theorem. It exposes a scheduling/storage/readiness tradeoff:
+A resident compartment `j` has local dynamics
 
 ```text
-resident state
-    continuous local work
-    compact current sufficient state
-    zero switch replay latency
-
-lazy replay
-    deferred local work
-    retained missed history
-    switch-time reconstruction burst
+h_j(t+1)=F_j(h_j(t),u_j(t)).
 ```
 
-A bounded-history lazy machine interpolates between those extremes and accepts the error given by the analytic law.
-
-## 9. Interpretation
-
-v0 and v1 together suggest a more precise meaning of “algorithmic mode.”
-
-A mode has at least two parts:
+An AIS-like boundary emits
 
 ```text
-identity     what counterfactual computation this route represents
-state        where that continuing computation currently is
+e_i(t)=1[G_i(h_i(t),context_i(t))>theta_i]
 ```
 
-A system that preserves identity but lets the dormant state stop evolving has not actually preserved the full computation. It has preserved only a label or checkpoint. To resume exactly, it needs the missing inputs or an equivalent sufficient statistic.
-
-This is why the data/program distinction becomes blurry in the emerging machine. A coordinate can simultaneously be:
-
-- a representation of past input;
-- a sufficient statistic for future prediction;
-- memory;
-- the current state of a procedure.
-
-## 10. Relation to established ideas
-
-The ingredients are not new in isolation. v0 lives near multiplicative gating and conditional computation. v1 lives near recursive filtering, sufficient statistics, caching/materialized state, lazy evaluation, replay, and state-space models. Mixture-of-experts architectures provide an obvious strong alternative when computations are explicitly separated. Recurrent networks provide an obvious attacker when one generic state might encode all needed histories without named modes.
-
-FusionMachine's scientific question is therefore narrower than “can neural networks route experts?” or “can recurrent state remember history?” It is:
-
-> **When does preserving several counterfactually distinct computations as continuing resident state provide a useful coordinate system or computational advantage over immediately blended generic state?**
-
-## 11. Biological interpretation boundary
-
-A branched dendritic arbor motivates the picture of locally persistent computational states meeting a nonlinear soma/AIS boundary. Real dendritic branches are known to exhibit nonlinear integration, and neuronal structure can create different temporal filters and local states. None of the v0-v1 results establish that biological branches implement the abstract A/B modes, that the AIS acts as the exact context gate here, or that spikes are merely publication packets.
-
-A biological mapping becomes meaningful only if later gates replace abstract state coordinates with a physically constrained branched substrate and the same computational distinctions survive matched controls.
-
-## 12. Limitations
-
-The current experiments remain deliberately small:
-
-- A and B are hand-defined input computations;
-- v1 gives both routes the same first-order recurrence family;
-- context is supplied explicitly;
-- hidden v1 drives are iid and exactly available when retained;
-- full replay is allowed unlimited switch latency;
-- there is no task-trained formation of routes;
-- there is no equal-capacity generic recurrent attacker yet;
-- there is no hardware energy or communication model;
-- there is no biological validation.
-
-The point is to make the object fail cleanly before scaling it.
-
-## 13. Next experiment — genuinely different temporal algorithms
-
-The critical v2 test should no longer let both resident routes be copies of the same exponential filter.
-
-A useful pair would be computationally incompatible temporal mechanisms, for example:
+with
 
 ```text
-route A: continuous leaky/integrating predictor
-route B: finite-state relational/parity/event procedure
+e_i(t)∈{0,1}.
 ```
 
-Both must continue through periods when they are behaviorally irrelevant. Context switches should reveal whether the dormant procedure remains at the correct internal state.
+The routing material applies
 
-The strongest attacker should receive the same total number of state scalars but use them as an unconstrained generic recurrent state. If that model matches or beats separated resident modes, then FusionMachine's named-mode picture may be explanatory rather than computationally privileged. That is an important possible negative result.
+```text
+u_j(t+d_ij) += W_ji e_i(t).
+```
+
+The event therefore does not need to carry a destination label in its amplitude. `W`, `d`, source identity, branch identity and local target address are state held in the machine itself.
+
+## 5. Gate 2A — address in matter
+
+Eight source identities emit exactly the same payload `1`. Their intended destinations differ only by route identity.
+
+| condition | accuracy |
+|---|---:|
+| intact route identity | **1.000** |
+| pooled source identity | 0.125 |
+| cyclic route shuffle | 0.000 |
+| explicit digital-address oracle | **1.000** |
+
+The pooled control exposes the information boundary cleanly. Once source identity is erased, every event is literally the same one-bit observation; a deterministic decoder has only the balanced 1/8 target prior. The explicit-address oracle restores the missing information in the payload.
+
+This gate is not a claim that wires as addresses are novel. It establishes the bookkeeping required by the architecture:
+
+> **Event content and route identity are separable information channels.**
+
+## 6. Gate 2B — synthetic developmental route formation
+
+The route graph is not simply handed a perfect lookup. A developmental control gives 12 targets two complementary coordinates:
+
+```text
+3 coarse chemical families
+×
+4 activity-defined slots
+```
+
+Chemistry is ambiguous within each family. Activity is ambiguous across families. Independent noise perturbs both source and target signatures. A route score combines row-normalized cue matrices:
+
+```text
+score_ij = z(chemistry_ij) + beta*z(activity_ij)
+```
+
+with `beta=1` frozen before evaluation.
+
+Across 64 deterministic seeds:
+
+| developmental policy | graph / routing accuracy |
+|---|---:|
+| **chemistry + activity** | **0.598958** |
+| activity only | 0.263021 |
+| chemistry only | 0.220052 |
+| shuffled activity identities | 0.190104 |
+| random wiring | 0.076823 |
+
+The combination gains 37.89 percentage points over chemistry-only and 33.59 points over activity-only.
+
+This is deliberately a synthetic complementarity test. It should be interpreted only as:
+
+> **A coarse identity prior and an experienced co-activation cue can jointly form a better route graph than either cue alone.**
+
+It is not a model of real guidance molecules, growth cones, or synaptogenesis.
+
+## 7. Gate 2C — publication permission is not resident state
+
+Two identical resident compartments receive the same six drives. One publishes normally. The other has publication suppressed on steps 1–4.
+
+Both resident trajectories are exactly
+
+```text
+0.500000
+0.750000
+0.875000
+0.937500
+0.968750
+0.984375
+```
+
+so the maximum state difference is `0.0`. The suppressed window emits zero events, and the first post-suppression event is immediately `1`.
+
+Thus the implementation distinguishes:
+
+```text
+what the computation currently is
+```
+
+from
+
+```text
+whether the computation is permitted to become traffic.
+```
+
+## 8. Gate 2D — route intervention is causally downstream of computation
+
+Freeze the source pulse train:
+
+```text
+0,1,0,1,1.
+```
+
+Under one material route every emitted bit reaches target D1. Change only one route destination and the bit-identical source trace reaches D2 instead.
+
+The source computation has not changed. The event payload has not changed. Only the graph changed.
+
+This provides a direct causal decomposition:
+
+> **Downstream behavior can be altered by changing the route while leaving resident computation and event generation fixed.**
+
+## 9. Gate 2E — asynchronous causal chain
+
+A five-compartment chain uses nonuniform material delays:
+
+| source | target | emit | arrive |
+|---:|---:|---:|---:|
+| 0 | 1 | 0 | 1 |
+| 1 | 2 | 1 | 3 |
+| 2 | 3 | 3 | 4 |
+| 3 | 4 | 4 | 7 |
+
+There is no global layer counter. Targets update only when scheduled writes arrive; local threshold crossing then creates a new event.
+
+The primitive is therefore closer to an asynchronous state machine than to a synchronous stack of layers.
+
+## 10. Combined interpretation
+
+The v0→v2 progression can now be stated compactly:
+
+```text
+v0: identity
+    multiple computations can coexist without being blended
+
+v1: history
+    each computation may need continuing resident state
+
+v2: causality
+    publication and routing need not be identical to that state
+```
+
+The emerging computational unit is:
+
+```text
+DENDRITIC / RESIDENT STATE
+rich local computation
+        ↓
+SOMA / AIS-LIKE BOUNDARY
+commit / suppress
+        ↓
+EVENT
+small public causal token
+        ↓
+AXONAL / SYNAPTIC MATERIAL
+route, delay, gain, target address
+        ↓
+TARGET RESIDENT STATE
+local interpretation of the write
+```
+
+This also explains how a binary pulse can participate in a rich computation: the bit is only one factor. The route graph and the receiving dynamics contain additional structured state.
+
+## 11. Biological neighborhood and fence
+
+Fréal & Hoogenraad (Neuron, 2025), **“The dynamic axon initial segment: From neuronal polarity to network homeostasis”**, DOI `10.1016/j.neuron.2025.01.004`, review the AIS as a specialized compartment between somatodendritic and axonal domains involved in action-potential generation/modulation and neuronal polarity. They emphasize molecular heterogeneity, activity-dependent AIS remodeling, and axo-axonic innervation at the AIS.
+
+Those observations motivate separating resident somatodendritic computation from an output boundary. Historical chemoaffinity and modern axon-guidance/synapse-specificity work motivate asking how route identity can be embodied by developmental structure rather than repeated in every event.
+
+FusionMachine does not establish that:
+
+- dendritic branches are literal algorithm eigenmodes;
+- an AP is semantically a software commit bit;
+- axons encode explicit digital destination fields;
+- chandelier cells are permission gates in the software sense;
+- the synthetic chemistry/activity rule reproduces neural development.
+
+Biological mapping remains a hypothesis generator, not the evidence for the computational claims.
+
+## 12. Prior-art boundary
+
+Every ingredient has mature neighbors: dendritic nonlinear subunits, conditional computation, multiplicative gating, recursive state, event-triggered communication, graph routing, neural development, chemoaffinity, activity-dependent refinement and asynchronous/event-driven systems.
+
+A useful FusionMachine claim must therefore come from the **composition and causal separation** of those roles, not from relabeling established mechanisms.
+
+## 13. Strong next attacker
+
+The next gate should stop adding biological detail and compare against an equal-budget generic system:
+
+```text
+generic recurrent state
++
+learned routing matrix
+```
+
+with the same number of state scalars, route parameters, training episodes and event bandwidth.
+
+If the generic system matches FusionMachine on switching, routing and delayed-credit tasks, the dendrite/AIS/axon decomposition may be mainly an explanatory coordinate system. If the separated architecture wins under matched capacity—especially with sparse communication, abrupt context switches or delayed causal credit—then it has a stronger computational case.
 
 ## 14. Reproducibility
 
@@ -378,6 +332,7 @@ python -m pip install -e ".[test]"
 pytest -q
 python -m experiments.run_v0 --out /tmp/v0.json
 python -m experiments.run_v1 --out /tmp/v1.json
+python -m experiments.run_v2 --out /tmp/v2.json
 ```
 
-Canonical receipts live in `results/v0.json` and `results/v1.json` and are regenerated in CI.
+Canonical receipts live in `results/v0.json`, `results/v1.json`, and `results/v2.json` and are regenerated in CI.

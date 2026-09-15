@@ -3,209 +3,144 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FusionMachine — resident algorithms, nonlinear boundary</title>
-  <meta name="description" content="Interactive FusionMachine laboratory: preserve distinct computations and their histories until a nonlinear contextual boundary selects behavior.">
+  <title>FusionMachine — resident computation, causal event, material route</title>
+  <meta name="description" content="Interactive FusionMachine laboratory: resident computation, nonlinear publication, one-bit events and material routing.">
   <link rel="stylesheet" href="web/style.css">
 </head>
 <body>
-  <main class="shell">
-    <header class="hero">
-      <div>
-        <p class="eyebrow">FUSIONMACHINE · V0 → V1</p>
-        <h1>Keep the algorithms resident.<br><span>Fuse only at the causal boundary.</span></h1>
-        <p class="lede">v0 asks what happens when two computations give the same answer but use different routes. v1 asks the harder temporal question: if one route is ignored by behavior, does its computation keep moving anyway?</p>
+<main class="shell">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">FUSIONMACHINE · V0 → V2</p>
+      <h1>The state can be rich.<br><span>The pulse can stay tiny.</span></h1>
+      <p class="lede">A resident computation keeps evolving locally. An AIS-like boundary decides whether it becomes public. The emitted event is only one bit; the axonal graph carries the destination.</p>
+    </div>
+    <div class="result-card">
+      <div class="result-number">1 bit</div>
+      <div class="result-label">event payload in v2</div>
+      <div class="result-vs">The address lives in the route.</div>
+    </div>
+  </header>
+
+  <section class="equation-strip" aria-label="FusionMachine architecture">
+    <div><span>resident</span> h(t)</div><div class="arrow">→</div>
+    <div><span>AIS</span> e∈{0,1}</div><div class="arrow">→</div>
+    <div><span>axon</span> W,d</div><div class="arrow">→</div>
+    <div><span>target</span> hⱼ(t+d)</div>
+  </section>
+
+  <section class="card spine-card">
+    <div class="card-kicker">CURRENT SPINE</div>
+    <div class="spine-flow">
+      <div><b>v0</b><span>keep different computations separate</span></div>
+      <i>→</i><div><b>v1</b><span>keep their history resident</span></div>
+      <i>→</i><div class="active-spine"><b>v2</b><span>route one-bit events through matter</span></div>
+    </div>
+  </section>
+
+  <section class="lab-grid compact-v0">
+    <div class="control-card card">
+      <div class="card-kicker">V0 · SAME ANSWER, DIFFERENT ALGORITHM</div>
+      <h2>Preserve the computations before context arrives</h2>
+      <div class="controls">
+        <label for="x0">x₀ · direct cue <output id="x0-out">-1</output></label>
+        <input id="x0" type="range" min="-1" max="1" step="2" value="-1">
+        <label for="x1">x₁ · relation cue 1 <output id="x1-out">-1</output></label>
+        <input id="x1" type="range" min="-1" max="1" step="2" value="-1">
+        <label for="x2">x₂ · relation cue 2 <output id="x2-out">-1</output></label>
+        <input id="x2" type="range" min="-1" max="1" step="2" value="-1">
+        <label for="context">context · publish <output id="context-out">A</output></label>
+        <input id="context" type="range" min="-1" max="1" step="2" value="-1">
       </div>
-      <div class="result-card">
-        <div class="result-number">75/80</div>
-        <div class="result-label">steps needed at α=.98 to cut lazy replay error to 10%</div>
-        <div class="result-vs">Persistence is also a replay horizon.</div>
+      <div class="button-row"><button id="correlate">Restore correlated world</button><button id="autoplay" class="accent">Auto-play truth table</button></div>
+      <div id="world-status" class="world-status"></div>
+    </div>
+
+    <div class="machine-card card">
+      <div class="card-kicker">V0 · RESIDENT MODES</div>
+      <div class="mode-row">
+        <article id="mode-a" class="mode"><div class="mode-label">A · DIRECT</div><div id="a-value" class="mode-value">−1</div><code>A=x₀</code></article>
+        <div class="plus">+</div>
+        <article id="mode-b" class="mode"><div class="mode-label">B · RELATIONAL</div><div id="b-value" class="mode-value">+1</div><code>B=x₁x₂</code></article>
       </div>
-    </header>
+      <div class="term-grid"><div><span>average</span><strong id="sum-term">0.0</strong></div><div><span>context × difference</span><strong id="gate-term">0.0</strong></div></div>
+      <div id="publication" class="publication mini-publication"><span>published</span><strong id="published-value">−1</strong><small id="publication-label">publishing A</small></div>
+      <div class="hidden-v0-readouts"><span id="collapsed-value"></span><span id="linear-value"></span><span id="collapse-explain"></span></div>
+      <div id="collapsed" class="sr-only"></div><div id="linear-attacker" class="sr-only"></div>
+    </div>
+  </section>
 
-    <section class="equation-strip" aria-label="FusionMachine equation">
-      <div><span>A</span> = x<sub>0</sub></div>
-      <div><span>B</span> = x<sub>1</sub>x<sub>2</sub></div>
-      <div class="arrow">→</div>
-      <div><span>z</span> = [A, B]</div>
-      <div class="arrow">→</div>
-      <div><span>y</span> = ½(A+B) + ½c(B−A)</div>
-    </section>
+  <section class="truth card compact-truth">
+    <div class="truth-head"><div><div class="card-kicker">V0 · COMPLETE INTERVENTION WORLD</div><h2>Same answer can hide different algorithms</h2></div><p>Nonlinear separated: 1.00 · affine/collapsed: 0.75</p></div>
+    <div class="table-wrap"><table><thead><tr><th>x₀</th><th>x₁</th><th>x₂</th><th>c</th><th>A</th><th>B</th><th>target</th><th>nonlinear</th><th>linear</th></tr></thead><tbody id="truth-body"></tbody></table></div>
+  </section>
 
-    <section class="lab-grid">
-      <div class="control-card card">
-        <div class="card-kicker">V0 · INPUT / CONTEXT</div>
-        <h2>Change the hidden world</h2>
-        <p>The ordinary world obeys x₀=x₁x₂. Break that relation and the two computations become counterfactually different.</p>
+  <section id="v1-lab" class="v1-lab card">
+    <div class="v1-head"><div><div class="card-kicker">V1 · RESIDENT ALGORITHMIC STATE</div><h2>A dormant computation still has a history.</h2><p>Resident state pays continuous local work. Lazy state must retain and replay the missed history when context returns.</p></div><div class="v1-equation"><code>hₜ = αhₜ₋₁ + (1−α)uₜ</code><code>RMSE(K) ∝ αᴷ</code></div></div>
+    <div class="v1-controls">
+      <label for="v1-alpha">persistence α <output id="v1-alpha-out">0.95</output></label><input id="v1-alpha" type="range" min="0.50" max="0.98" step="0.01" value="0.95">
+      <label for="v1-k">remembered tail K / 80 <output id="v1-k-out">16</output></label><input id="v1-k" type="range" min="0" max="80" step="1" value="16">
+    </div>
+    <div id="v1-tape" class="v1-tape"></div><div class="v1-legend"><span><i class="forgotten-dot"></i> omitted</span><span><i class="remembered-dot"></i> retained for replay</span></div>
+    <div class="v1-metrics"><div><span>switch RMSE</span><strong id="v1-rmse"></strong></div><div><span>fraction of zero-history</span><strong id="v1-ratio"></strong></div><div><span>K for ≤10%</span><strong id="v1-horizon"></strong></div><div><span>switch-time work</span><strong id="v1-switch-cost"></strong></div></div>
+    <div class="v1-policy-grid"><div class="v1-policy resident-policy"><span>RESIDENT</span><strong>pay while time passes</strong><p id="v1-resident-status"></p></div><div class="v1-policy lazy-policy"><span>REPLAY</span><strong>pay when context switches</strong><p id="v1-lazy-status"></p></div></div>
+    <div class="v1-wall"><span>V1 WALL SENTENCE</span><strong>Persistence is also a replay horizon.</strong><p>Full replay is explicitly exact when all missed history and switch latency are allowed.</p></div>
+  </section>
 
-        <div class="controls">
-          <label for="x0">x₀ · direct cue <output id="x0-out">-1</output></label>
-          <input id="x0" type="range" min="-1" max="1" step="2" value="-1">
+  <section id="v2-lab" class="v2-lab card">
+    <div class="v2-head">
+      <div><div class="card-kicker">V2 · DENDRITE → AIS → AXON → DENDRITE</div><h2>The pulse is tiny because the machine carries the address.</h2><p>The resident dendrite is rich state. The AIS only commits a one-bit event. The source-specific axonal route decides which downstream dendritic compartment receives the write.</p></div>
+      <div class="v2-score"><strong>0.599</strong><span>chemistry + activity route recovery</span><small>vs .220 chemistry · .263 activity · .077 random</small></div>
+    </div>
 
-          <label for="x1">x₁ · relation cue 1 <output id="x1-out">-1</output></label>
-          <input id="x1" type="range" min="-1" max="1" step="2" value="-1">
+    <div class="v2-controls">
+      <label>source computation<select id="v2-source"><option value="0">axon A0</option><option value="1">axon A1</option><option value="2">axon A2</option><option value="3">axon A3</option></select></label>
+      <label>route material<select id="v2-route-mode"><option value="learned">chemistry + activity</option><option value="chemistry">chemistry only</option><option value="activity">activity only</option><option value="shuffled">shuffled routes</option></select></label>
+      <label class="toggle"><input id="v2-ais-gate" type="checkbox"> suppress AIS publication</label>
+      <div class="button-row"><button id="v2-reroute">Reroute one axon</button><button id="v2-step" class="accent">Step machine</button><button id="v2-autoplay">Auto-play</button></div>
+    </div>
 
-          <label for="x2">x₂ · relation cue 2 <output id="x2-out">-1</output></label>
-          <input id="x2" type="range" min="-1" max="1" step="2" value="-1">
-
-          <label for="context">context c · publish <output id="context-out">A</output></label>
-          <input id="context" type="range" min="-1" max="1" step="2" value="-1">
-        </div>
-
-        <div class="button-row">
-          <button id="correlate" type="button">Restore correlated world</button>
-          <button id="autoplay" type="button" class="accent">Auto-play truth table</button>
-        </div>
-        <div id="world-status" class="world-status"></div>
-      </div>
-
-      <div class="machine-card card">
-        <div class="card-kicker">V0 · RESIDENT COMPUTATION</div>
-        <h2>Both algorithms exist before selection</h2>
-        <div class="mode-row">
-          <article id="mode-a" class="mode">
-            <div class="mode-label">MODE A · DIRECT</div>
-            <div id="a-value" class="mode-value">-1</div>
-            <code>A(x)=x₀</code>
-          </article>
-          <div class="plus">+</div>
-          <article id="mode-b" class="mode">
-            <div class="mode-label">MODE B · RELATIONAL</div>
-            <div id="b-value" class="mode-value">+1</div>
-            <code>B(x)=x₁x₂</code>
-          </article>
-        </div>
-        <p class="machine-note">The state is not forced to decide which computation is “the answer” yet. Computational identity remains available to the boundary.</p>
+    <div class="v2-machine">
+      <div class="v2-column">
+        <span class="v2-stage">DENDRITIC RESIDENT</span>
+        <div class="v2-resident"><small>source state</small><strong id="v2-source-state">0.00</strong><div class="state-bar"><i id="v2-source-bar"></i></div><p>Local state keeps moving even when publication is blocked.</p></div>
       </div>
 
-      <div class="boundary-card card wide">
-        <div class="card-kicker">V0 · NONLINEAR CAUSAL BOUNDARY</div>
-        <div class="boundary-grid">
-          <div>
-            <h2>Context changes which mode becomes behavior</h2>
-            <p>The selector needs the interaction <code>c·(B−A)</code>. Context by itself is not enough; it has to multiply the difference between resident computations.</p>
-            <div class="term-grid">
-              <div><span>average term</span><strong id="sum-term">0.0</strong></div>
-              <div><span>context × difference</span><strong id="gate-term">-1.0</strong></div>
-            </div>
-          </div>
-          <div id="publication" class="publication">
-            <span>published result</span>
-            <strong id="published-value">-1</strong>
-            <small id="publication-label">publishing A</small>
-          </div>
-        </div>
+      <div class="v2-column v2-ais-column">
+        <span class="v2-stage">AIS · COMMIT</span>
+        <div class="ais-orb" id="v2-ais-orb"><span id="v2-pulse">0</span></div>
+        <code>e = 1[h ≥ θ]</code>
+        <p id="v2-ais-status">below threshold</p>
       </div>
 
-      <div id="collapsed" class="card attacker-card">
-        <div class="card-kicker">V0 · ATTACKER 1 · COLLAPSE FIRST</div>
-        <h2>Average away algorithm identity</h2>
-        <div class="attacker-value" id="collapsed-value">0.0</div>
-        <code>r=(A+B)/2</code>
-        <p id="collapse-explain"></p>
-        <div class="score"><span>complete-table ceiling</span><strong>0.75 accuracy</strong></div>
+      <div class="v2-column v2-axon-column">
+        <span class="v2-stage">AXONAL ROUTING FABRIC</span>
+        <div class="axon-readout"><span>payload</span><strong id="v2-payload">0 · one-bit event</strong></div>
+        <div class="axon-readout"><span>material identity</span><strong id="v2-axon-id">axon A0</strong></div>
+        <div class="axon-track"><i id="v2-moving-pulse"></i><b id="v2-route-label">A0 → D0</b></div>
+        <p class="route-sentence">The <strong>address lives in the route</strong>, not in the pulse amplitude.</p>
       </div>
 
-      <div id="linear-attacker" class="card attacker-card">
-        <div class="card-kicker">V0 · ATTACKER 2 · LINEAR BOUNDARY</div>
-        <h2>Keep A and B, remove the product</h2>
-        <div class="attacker-value" id="linear-value">0.0</div>
-        <code>ŷ=0.5A+0.5B</code>
-        <p id="linear-explain">The complete-table least-squares solution assigns zero weight to context because an affine readout cannot form context×mode interactions.</p>
-        <div class="score"><span>complete-table result</span><strong>MSE 0.50 · 0.75 accuracy</strong></div>
-      </div>
-    </section>
-
-    <section class="witness card">
-      <div>
-        <div class="card-kicker">V0 · INFORMATION WITNESS</div>
-        <h2>After collapse, no clever decoder can recover what was erased.</h2>
-        <p>These two states expose the same collapsed observation <code>(r,c)=(0,−1)</code>, but demand opposite answers.</p>
-      </div>
-      <div class="witness-pair">
-        <div><span>state L</span><code>A=−1 · B=+1 · target=−1</code></div>
-        <div><span>state R</span><code>A=+1 · B=−1 · target=+1</code></div>
-      </div>
-    </section>
-
-    <section class="truth card">
-      <div class="truth-head">
-        <div>
-          <div class="card-kicker">V0 · COMPLETE INTERVENTION WORLD</div>
-          <h2>All 16 states — no sampling trick</h2>
-        </div>
-        <p>The highlighted row is the current machine state.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>x₀</th><th>x₁</th><th>x₂</th><th>c</th><th>A</th><th>B</th><th>target</th><th>nonlinear</th><th>linear</th></tr></thead>
-          <tbody id="truth-body"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="v1-lab" class="v1-lab card">
-      <div class="v1-head">
-        <div>
-          <div class="card-kicker">V1 · RESIDENT ALGORITHMIC STATE</div>
-          <h2>The dormant computation still has a history.</h2>
-          <p>During an 80-step interval behavior looks at route A. Route B can either keep updating continuously, or stop and later reconstruct itself from a retained tail of missed drives.</p>
-        </div>
-        <div class="v1-equation">
-          <code>hₜ = αhₜ₋₁ + (1−α)uₜ</code>
-          <code>RMSE² = (1−α)² α²ᴷ (1−α²⁽ᴺ⁻ᴷ⁾)/(1−α²)</code>
+      <div class="v2-column">
+        <span class="v2-stage">TARGET DENDRITES</span>
+        <div id="v2-targets" class="v2-targets">
+          <div data-target="0"><span>D0</span><strong>0.00</strong></div><div data-target="1"><span>D1</span><strong>0.00</strong></div><div data-target="2"><span>D2</span><strong>0.00</strong></div><div data-target="3"><span>D3</span><strong>0.00</strong></div>
         </div>
       </div>
+    </div>
 
-      <div class="v1-controls">
-        <label for="v1-alpha">persistence α <output id="v1-alpha-out">0.95</output></label>
-        <input id="v1-alpha" type="range" min="0.50" max="0.98" step="0.01" value="0.95">
-        <label for="v1-k">remembered dormant tail K of 80 <output id="v1-k-out">16</output></label>
-        <input id="v1-k" type="range" min="0" max="80" step="1" value="16">
-      </div>
+    <div class="v2-bottom-grid">
+      <div><span class="v2-stage">CAUSAL EVENT LOG</span><ol id="v2-log" class="v2-log"><li>Step the machine to emit an event.</li></ol></div>
+      <div class="v2-result-panel"><span>FROZEN V2 CONTROLS</span><b>intact route 1.000</b><b>pooled identity 0.125</b><b>shuffled route 0.000</b><b>digital-address oracle 1.000</b></div>
+    </div>
+  </section>
 
-      <div id="v1-tape" class="v1-tape" aria-label="80-step dormant history"></div>
-      <div class="v1-legend"><span><i class="forgotten-dot"></i> omitted history</span><span><i class="remembered-dot"></i> retained for replay</span></div>
+  <section class="boundary-note"><strong>Claim boundary:</strong> v0–v2 are synthetic computational experiments. This is <strong>not a biological-neuron claim</strong>, not evidence that dendrites literally store arbitrary programs, and not a claim that chemical guidance is captured by one vector score. The attached AIS literature motivates separating resident state, publication, and routing; the checked-in Python receipts are the scientific authority.</section>
 
-      <div class="v1-metrics">
-        <div><span>analytic switch RMSE</span><strong id="v1-rmse">0.070427</strong></div>
-        <div><span>fraction of zero-history error</span><strong id="v1-ratio">44.0%</strong></div>
-        <div><span>K for ≤10% error at this α</span><strong id="v1-horizon">45 / 80</strong></div>
-        <div><span>switch-time lazy work</span><strong id="v1-switch-cost">16 replay updates</strong></div>
-      </div>
-
-      <div class="v1-policy-grid">
-        <div class="v1-policy resident-policy">
-          <span>RESIDENT DUAL</span>
-          <strong>pay while time passes</strong>
-          <p id="v1-resident-status"></p>
-        </div>
-        <div class="v1-policy lazy-policy">
-          <span>BOUNDED REPLAY</span>
-          <strong>pay when context switches</strong>
-          <p id="v1-lazy-status"></p>
-        </div>
-      </div>
-
-      <div class="v1-wall">
-        <span>V1 WALL SENTENCE</span>
-        <strong>Persistence is also a replay horizon.</strong>
-        <p>A slowly forgetting computation retains old events. If you stop updating it, those same old events must remain available to reconstruct where the computation should be now.</p>
-      </div>
-    </section>
-
-    <section class="boundary-note">
-      <strong>Claim boundary:</strong> v0 is an exact algebraic construction and v1 is a first-order state/replay experiment. This is <strong>not a biological-neuron claim</strong>, not evidence that arbitrary programs live in dendrites, and not a performance claim over mixture-of-experts or generic recurrent systems. Full replay is explicitly exact when complete history and switch latency are allowed. The checked-in Python receipts remain the scientific authority.
-    </section>
-
-    <footer>
-      <a href="README.md">README</a>
-      <a href="PAPER.md">paper</a>
-      <a href="RESULTS_V0.md">v0 result</a>
-      <a href="RESULTS_V1.md">v1 result</a>
-      <a href="docs/RELATED_WORK.md">related work</a>
-    </footer>
-  </main>
-  <script src="web/app.js" defer></script>
-  <script src="web/v1.js" defer></script>
+  <footer><a href="README.md">README</a><a href="PAPER.md">paper</a><a href="RESULTS_V0.md">v0</a><a href="RESULTS_V1.md">v1</a><a href="RESULTS_V2.md">v2</a><a href="docs/RELATED_WORK.md">related work</a></footer>
+</main>
+<script src="web/app.js" defer></script>
+<script src="web/v1.js" defer></script>
+<script src="web/v2.js" defer></script>
 </body>
 </html>
