@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FusionMachine — resident algorithms, nonlinear boundary</title>
+  <meta name="description" content="Interactive FusionMachine v0: two resident computations remain separate until a nonlinear contextual boundary selects behavior.">
+  <link rel="stylesheet" href="web/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">FUSIONMACHINE · V0</p>
+        <h1>Keep the algorithms resident.<br><span>Fuse only at the causal boundary.</span></h1>
+        <p class="lede">A tiny complete truth-table experiment about <strong>same answer, different algorithm</strong>. The two internal computations can agree perfectly in the ordinary world, then diverge under intervention. The question is whether the machine preserved both.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-number">1.00</div>
+        <div class="result-label">nonlinear selector accuracy</div>
+        <div class="result-vs">vs 0.75 linear / collapsed</div>
+      </div>
+    </header>
+
+    <section class="equation-strip" aria-label="FusionMachine equation">
+      <div><span>A</span> = x<sub>0</sub></div>
+      <div><span>B</span> = x<sub>1</sub>x<sub>2</sub></div>
+      <div class="arrow">→</div>
+      <div><span>z</span> = [A, B]</div>
+      <div class="arrow">→</div>
+      <div><span>y</span> = ½(A+B) + ½c(B−A)</div>
+    </section>
+
+    <section class="lab-grid">
+      <div class="control-card card">
+        <div class="card-kicker">INPUT / CONTEXT</div>
+        <h2>Change the hidden world</h2>
+        <p>The ordinary world obeys x₀=x₁x₂. Break that relation and the two computations become counterfactually different.</p>
+
+        <div class="controls">
+          <label for="x0">x₀ · direct cue <output id="x0-out">-1</output></label>
+          <input id="x0" type="range" min="-1" max="1" step="2" value="-1">
+
+          <label for="x1">x₁ · relation cue 1 <output id="x1-out">-1</output></label>
+          <input id="x1" type="range" min="-1" max="1" step="2" value="-1">
+
+          <label for="x2">x₂ · relation cue 2 <output id="x2-out">-1</output></label>
+          <input id="x2" type="range" min="-1" max="1" step="2" value="-1">
+
+          <label for="context">context c · publish <output id="context-out">A</output></label>
+          <input id="context" type="range" min="-1" max="1" step="2" value="-1">
+        </div>
+
+        <div class="button-row">
+          <button id="correlate" type="button">Restore correlated world</button>
+          <button id="autoplay" type="button" class="accent">Auto-play truth table</button>
+        </div>
+        <div id="world-status" class="world-status"></div>
+      </div>
+
+      <div class="machine-card card">
+        <div class="card-kicker">RESIDENT COMPUTATION</div>
+        <h2>Both algorithms exist before selection</h2>
+        <div class="mode-row">
+          <article id="mode-a" class="mode">
+            <div class="mode-label">MODE A · DIRECT</div>
+            <div id="a-value" class="mode-value">-1</div>
+            <code>A(x)=x₀</code>
+          </article>
+          <div class="plus">+</div>
+          <article id="mode-b" class="mode">
+            <div class="mode-label">MODE B · RELATIONAL</div>
+            <div id="b-value" class="mode-value">+1</div>
+            <code>B(x)=x₁x₂</code>
+          </article>
+        </div>
+        <p class="machine-note">The state is not forced to decide which computation is “the answer” yet. Computational identity remains available to the boundary.</p>
+      </div>
+
+      <div class="boundary-card card wide">
+        <div class="card-kicker">NONLINEAR CAUSAL BOUNDARY</div>
+        <div class="boundary-grid">
+          <div>
+            <h2>Context changes which mode becomes behavior</h2>
+            <p>The selector needs the interaction <code>c·(B−A)</code>. Context by itself is not enough; it has to multiply the difference between resident computations.</p>
+            <div class="term-grid">
+              <div><span>average term</span><strong id="sum-term">0.0</strong></div>
+              <div><span>context × difference</span><strong id="gate-term">-1.0</strong></div>
+            </div>
+          </div>
+          <div id="publication" class="publication">
+            <span>published result</span>
+            <strong id="published-value">-1</strong>
+            <small id="publication-label">publishing A</small>
+          </div>
+        </div>
+      </div>
+
+      <div id="collapsed" class="card attacker-card">
+        <div class="card-kicker">ATTACKER 1 · COLLAPSE FIRST</div>
+        <h2>Average away algorithm identity</h2>
+        <div class="attacker-value" id="collapsed-value">0.0</div>
+        <code>r=(A+B)/2</code>
+        <p id="collapse-explain"></p>
+        <div class="score"><span>complete-table ceiling</span><strong>0.75 accuracy</strong></div>
+      </div>
+
+      <div id="linear-attacker" class="card attacker-card">
+        <div class="card-kicker">ATTACKER 2 · LINEAR BOUNDARY</div>
+        <h2>Keep A and B, remove the product</h2>
+        <div class="attacker-value" id="linear-value">0.0</div>
+        <code>ŷ=0.5A+0.5B</code>
+        <p id="linear-explain">The complete-table least-squares solution assigns zero weight to context because an affine readout cannot form context×mode interactions.</p>
+        <div class="score"><span>complete-table result</span><strong>MSE 0.50 · 0.75 accuracy</strong></div>
+      </div>
+    </section>
+
+    <section class="witness card">
+      <div>
+        <div class="card-kicker">INFORMATION WITNESS</div>
+        <h2>After collapse, no clever decoder can recover what was erased.</h2>
+        <p>These two states expose the same collapsed observation <code>(r,c)=(0,−1)</code>, but demand opposite answers.</p>
+      </div>
+      <div class="witness-pair">
+        <div><span>state L</span><code>A=−1 · B=+1 · target=−1</code></div>
+        <div><span>state R</span><code>A=+1 · B=−1 · target=+1</code></div>
+      </div>
+    </section>
+
+    <section class="truth card">
+      <div class="truth-head">
+        <div>
+          <div class="card-kicker">COMPLETE INTERVENTION WORLD</div>
+          <h2>All 16 states — no sampling trick</h2>
+        </div>
+        <p>The highlighted row is the current machine state.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>x₀</th><th>x₁</th><th>x₂</th><th>c</th><th>A</th><th>B</th><th>target</th><th>nonlinear</th><th>linear</th></tr></thead>
+          <tbody id="truth-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="boundary-note">
+      <strong>Claim boundary:</strong> this page mirrors a two-bit algebraic construction. It is <strong>not a biological-neuron claim</strong>, not evidence that arbitrary programs live in dendrites, and not a performance claim over mixture-of-experts systems. The checked-in Python receipt is the scientific authority.
+    </section>
+
+    <footer>
+      <a href="README.md">README</a>
+      <a href="PAPER.md">paper</a>
+      <a href="RESULTS_V0.md">frozen result</a>
+      <a href="docs/RELATED_WORK.md">related work</a>
+    </footer>
+  </main>
+  <script src="web/app.js" defer></script>
+</body>
+</html>
