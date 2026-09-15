@@ -2,11 +2,21 @@
 
 > **Keep several computations resident. Let a nonlinear causal boundary decide which one becomes behavior.**
 
-FusionMachine is a small research program about a machine suggested by several earlier experiments: a vector/state need not represent only *data*. Its separated modes can represent the current outputs — and later the internal states — of different computations. A nonlinear/contextual boundary can then decide which resident computation becomes externally consequential without first averaging the alternatives into one representation.
+FusionMachine asks whether a vector/state can carry more than data: its separated modes can carry the current outputs — and then the continuing internal states — of different computations. Context arrives later, at a nonlinear causal boundary, without requiring the alternatives to have been averaged into one representation first.
 
-This repository starts with the smallest exact case. It is **not** yet a biological-neuron model and it does not claim that arbitrary algorithms are literally stored in dendritic eigenmodes.
+This is an AI architecture experiment with a neuron-inspired lineage, **not a claim that biological dendrites literally implement these equations**.
 
-**Live v0 instrument:** https://anttiluode.github.io/FusionMachine/
+**Live instrument:** https://anttiluode.github.io/FusionMachine/
+
+## Current spine
+
+```text
+v0: keep computational identity separate
+        ↓
+v1: keep computational history resident
+        ↓
+next: make the resident modes genuinely different temporal algorithms
+```
 
 ## v0 — same answer, different algorithm
 
@@ -17,22 +27,14 @@ A(x) = x0            direct route
 B(x) = x1*x2         relational route
 ```
 
-In the ordinary world we impose
-
-```text
-x0 = x1*x2
-```
-
-so A and B produce exactly the same answer. Behavior alone cannot tell which computation is present.
-
-Then break that correlation and add a context bit:
+In the ordinary world `x0=x1*x2`, so A and B produce exactly the same answer. Behavior alone cannot identify which route is present. Break that correlation and add a context bit:
 
 ```text
 context = -1 -> publish A
 context = +1 -> publish B
 ```
 
-The resident state keeps both computations:
+The resident representation keeps both:
 
 ```text
 z = [A, B]
@@ -41,12 +43,10 @@ z = [A, B]
 and the minimal exact boundary is
 
 ```text
-y = 0.5*(A+B) + 0.5*context*(B-A)
+y = 0.5*(A+B) + 0.5*context*(B-A).
 ```
 
-The second term is a multiplicative context-by-mode interaction.
-
-### Frozen complete-truth-table result
+### Frozen v0 result
 
 | boundary / representation | MSE | accuracy |
 |---|---:|---:|
@@ -55,37 +55,102 @@ The second term is a multiplicative context-by-mode interaction.
 | best full-data lookup after collapse to `(A+B)/2` | 0.500000 | 0.750 |
 | **two-row calibrated factorized selector** | **0.000000** | **1.000** |
 
-The best affine attacker is simply
+The collapse failure is information-theoretic. Two intervention states expose the same collapsed `(r,context)=(0,-1)` while requiring opposite outputs, so no later deterministic decoder can reconstruct the lost algorithm identity.
+
+See [`RESULTS_V0.md`](RESULTS_V0.md) and [`results/v0.json`](results/v0.json).
+
+## v1 — algorithmic state keeps moving while behavior looks elsewhere
+
+v1 replaces the static route output with a persistent computation:
 
 ```text
-0.5*A + 0.5*B
+h_t = alpha*h_(t-1) + (1-alpha)*u_t.
 ```
 
-because the contextual product term is outside its feature span.
+Both A and B can now have histories. During an 80-step interval context stays on A while B receives hidden drives. At the switch to B we compare:
 
-The collapse attacker loses information even with the complete truth table. When A and B disagree, `(A+B)/2=0`. Two states can therefore have the same collapsed state and the same context while requiring opposite outputs. No later deterministic readout can reconstruct which algorithm had which sign.
+- **resident dual** — B was updated continuously and is already current;
+- **bounded replay K** — B was suspended but the last `K` dormant drives were retained;
+- **full replay K=80** — privileged exact attacker that stores and replays the whole missing history.
 
-See [`RESULTS_V0.md`](RESULTS_V0.md) and the frozen [`results/v0.json`](results/v0.json).
-
-## What the result means
-
-The v0 object is
+For iid hidden ±1 drives, the switch-time error from forgetting all but the last `K` inputs has the exact variance
 
 ```text
-separated resident computations
-             ↓
-        [ A , B ]
-             ↓
-context × mode interaction
-             ↓
-      causal publication
+Var[e]
+ = (1-alpha)^2 * alpha^(2K)
+   * (1-alpha^(2(N-K))) / (1-alpha^2).
 ```
 
-The earned statement is narrow:
+Across 4,096 deterministic tapes and four persistence values, the worst measured-versus-analytic RMSE discrepancy is **1.664%**.
 
-> **A resident vector can preserve multiple counterfactually distinct computations at once. A nonlinear context interaction can select which computation becomes behavior, while collapsing the modes can destroy information that no later boundary can recover.**
+### Primary v1 curve — alpha=0.95, gap=80
 
-That is already different from treating the vector as a single blended feature representation.
+| remembered tail K | measured switch RMSE | analytic RMSE |
+|---:|---:|---:|
+| 0 | 0.160939 | 0.160106 |
+| 4 | 0.131933 | 0.130399 |
+| 8 | 0.106385 | 0.106199 |
+| 16 | 0.070331 | 0.070427 |
+| 32 | 0.030810 | 0.030906 |
+| 64 | 0.005413 | 0.005395 |
+| **80** | **0.000000** | **0.000000** |
+
+The more persistent the mode, the longer the history needed for accurate lazy reconstruction. The smallest `K` that reduces analytic replay RMSE to at most 10% of the zero-history value is:
+
+| alpha | required K of 80 |
+|---:|---:|
+| 0.50 | **4** |
+| 0.80 | **11** |
+| 0.95 | **45** |
+| 0.98 | **75** |
+
+So the v1 wall sentence is:
+
+> **Persistence is also a replay horizon.**
+
+A slowly forgetting computation remembers distant events, but exactly for that reason those events must have been processed or retained if the computation is suspended.
+
+### Nothing is free
+
+For the 80-step dormant interval:
+
+```text
+resident dual
+    80 dormant updates during the gap
+     0 hidden drives stored
+     0 replay updates at switch
+
+lazy full replay
+     0 dormant updates during the gap
+    80 hidden drives stored
+    80 replay updates at switch
+```
+
+Resident state is therefore a **readiness strategy**: it converts future replay latency and history storage into continuous local update cost. Full replay is exact when those other resources are allowed.
+
+See [`RESULTS_V1.md`](RESULTS_V1.md) and [`results/v1.json`](results/v1.json).
+
+## What the machine currently means
+
+The emerging object is no longer just a contextual router:
+
+```text
+input
+  ↓
+separated continuing computations
+  ↓
+[h_A(t), h_B(t), ...]
+  ↓
+nonlinear context × mode interaction
+  ↓
+causal publication
+```
+
+v0 says **do not collapse computational identity before context arrives**.
+
+v1 says **when those computations have history, preserving identity is not enough: their states must keep evolving, or the missed history must remain recoverable**.
+
+That softens the ordinary data/program distinction. A resident coordinate can be a representation, a sufficient statistic, memory, or the partially executed state of a procedure.
 
 ## Why this connects to the earlier repos
 
@@ -93,11 +158,10 @@ The connection is conceptual, not a claim that the mechanisms are identical:
 
 ```text
 SighImageSuper
-    operators create persistent / recoverable modes
+    operators assign forgetting times to recoverable distinctions
 
 GAx
-    modes can correspond to counterfactually different algorithms,
-    not merely different candidate answers
+    modes can correspond to counterfactually different algorithms
 
 AnttisNeuron / GrowingAnttisNeuron
     branched physical structure can compile and separate dynamics
@@ -109,27 +173,27 @@ NewMachine
     resident state and causal publication are different variables
 
 FusionMachine
-    keep several computations resident and fuse/select them
-    only at a nonlinear causal boundary
+    preserve several computations and their histories,
+    fuse/select only at a nonlinear causal boundary
 ```
 
-The important shift is that **data, memory, partial computation, and algorithmic state may all be resident dynamical state**. v0 demonstrates only the simplest static version of that idea.
+v1 makes the Sigh connection particularly exact: the same persistence that protects old information also sets the amount of history needed to reconstruct a suspended mode.
 
-## Strong prior-art fence
+## Prior-art fence
 
-None of the ingredients by themselves are new fields. Dendritic nonlinear subunits, conditional computation, mixture-of-experts routing, multiplicative interactions, recurrent/state-space computation, and sparse delta communication all have substantial prior literature. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md) maps the closest neighborhoods.
+Dendritic nonlinear subunits, mixture-of-experts routing, multiplicative interactions, state-space filtering, streaming sufficient statistics, caching/materialized state, replay, and event-triggered communication are established ideas. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md) maps the nearest neighborhoods.
 
-FusionMachine's narrower research question is about the *combination and separation of roles*:
+FusionMachine's narrower research question is:
 
-> When is it useful to preserve several computations as resident modes, instead of blending them immediately, and delay context-dependent nonlinear selection until a causal output boundary?
+> **When is it useful to keep several counterfactually distinct computations alive as resident state and delay context-dependent nonlinear selection until a causal output boundary?**
 
 ## Next gate
 
-v1 should stop treating A and B as static outputs. Each branch should become a **dynamical algorithm with its own internal state**. Both algorithms continue to evolve every step; context only chooses which state is published.
+v2 should make the modes **genuinely different temporal algorithms**, not merely the same leaky recurrence driven by different input relations. The strongest attacker will be an equal-state-capacity generic recurrent model.
 
-The key attacker will be a system that keeps only the currently selected algorithm alive. If context switches, it must reconstruct the dormant computation from incomplete history. A true resident multimode machine should already have that computation at the correct state.
+If a generic recurrent state preserves the same switching information just as efficiently, the separated-algorithm interpretation may be a useful explanatory coordinate system rather than a computational advantage. That negative would be valuable too.
 
-Only after that survives should sparse publication, learned mode formation, slow operator rewriting, and biological mappings be added.
+Only after that should we add sparse external publication, learned mode formation, slow operator rewriting/growth, and stronger biological mappings.
 
 ## Run
 
@@ -137,17 +201,19 @@ Only after that survives should sparse publication, learned mode formation, slow
 python -m pip install -e ".[test]"
 pytest -q
 python -m experiments.run_v0 --out /tmp/v0.json
+python -m experiments.run_v1 --out /tmp/v1.json
 ```
 
 ## Repository map
 
-- `src/fusion_machine/core.py` — two computations, correlated/intervention worlds, exact nonlinear boundary
-- `src/fusion_machine/attackers.py` — best affine attacker, collapse attacker, information witness, factorized calibration
-- `experiments/run_v0.py` — deterministic scientific receipt
-- `results/v0.json` — frozen v0 numbers
-- `RESULTS_V0.md` — interpretation and claim boundary
-- `PAPER.md` — paper-style v0 argument and derivation
+- `src/fusion_machine/core.py` — two v0 computations and exact nonlinear boundary
+- `src/fusion_machine/attackers.py` — v0 linear/collapse attackers and factorized calibration
+- `src/fusion_machine/resident.py` — v1 persistent state and bounded-history reconstruction
+- `experiments/run_v0.py`, `experiments/run_v1.py` — deterministic scientific receipts
+- `results/v0.json`, `results/v1.json` — frozen numerical results
+- `RESULTS_V0.md`, `RESULTS_V1.md` — measured interpretations and claim boundaries
+- `PAPER.md` — paper-style evolving argument
 - `docs/RELATED_WORK.md` — literature neighborhood and novelty fence
 - `index.html`, `web/` — static GitHub Pages inspection instrument
-- `tests/` — mechanism and receipt regressions
-- `docs/superpowers/` — frozen design and implementation plan
+- `tests/` — mechanism, receipt, and web regressions
+- `docs/superpowers/` — frozen designs and implementation plans
