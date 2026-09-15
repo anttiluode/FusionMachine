@@ -1,4 +1,9 @@
 (() => {
+  const css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "web/v2.css";
+  document.head.appendChild(css);
+
   const $ = (id) => document.getElementById(id);
   const targetStates = [0, 0, 0, 0];
   let sourceState = 0;
