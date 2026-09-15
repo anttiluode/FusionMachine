@@ -55,3 +55,26 @@ def test_async_chain_uses_route_delays_and_logs_causal_hops():
     log = result["events"]
     assert [(e["source"], e["target"]) for e in log] == [(0, 1), (1, 2), (2, 3)]
     assert [(e["emit_time"], e["arrival_time"]) for e in log] == [(0, 1), (1, 3), (3, 4)]
+
+
+def test_async_chain_combines_all_same_time_writes_before_thresholding():
+    routes = {
+        0: [
+            Route(target=1, weight=1.0, delay=1),
+            Route(target=2, weight=1.0, delay=1),
+        ],
+        1: [
+            Route(target=3, weight=0.3, delay=1),
+            Route(target=4, weight=1.0, delay=1),
+        ],
+        2: [Route(target=3, weight=0.3, delay=1)],
+    }
+    result = run_async_chain(
+        routes=routes,
+        n_compartments=5,
+        initial_source=0,
+        threshold=0.5,
+        max_time=4,
+    )
+    assert 3 in result["fired"]
+    assert result["states"][3] == 0.6
