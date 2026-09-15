@@ -1,0 +1,60 @@
+{
+  "collapse_witness": {
+    "collapsed_state": 0.0,
+    "context": -1,
+    "left": {
+      "a": -1,
+      "b": 1,
+      "context": -1,
+      "target": -1,
+      "x0": -1,
+      "x1": 1,
+      "x2": 1
+    },
+    "right": {
+      "a": 1,
+      "b": -1,
+      "context": -1,
+      "target": 1,
+      "x0": 1,
+      "x1": -1,
+      "x2": 1
+    }
+  },
+  "collapsed_attacker": {
+    "accuracy": 0.75,
+    "mse": 0.5
+  },
+  "correlated": {
+    "agreement_fraction": 1.0,
+    "rows": 4
+  },
+  "intervention": {
+    "algorithm_disagreement_fraction": 0.5,
+    "rows": 16
+  },
+  "linear_attacker": {
+    "accuracy": 0.75,
+    "mse": 0.5,
+    "weights_bias_a_b_context": [
+      0.0,
+      0.5,
+      0.5,
+      0.0
+    ]
+  },
+  "nonlinear_boundary": {
+    "accuracy": 1.0,
+    "mse": 0.0
+  },
+  "two_row_calibration": {
+    "accuracy": 1.0,
+    "calibration_rows": 2,
+    "mse": 0.0,
+    "weights_sum_gate": [
+      0.5,
+      0.5
+    ]
+  },
+  "version": "v0"
+}
