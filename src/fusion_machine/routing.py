@@ -84,14 +84,18 @@ def run_async_chain(
 ) -> dict[str, object]:
     """Run an inspectable event-driven chain with route-specific delays.
 
-    The initial source emits at t=0. Every target integrates only when a
-    scheduled write arrives; if it crosses threshold it emits once. There is
-    no layer clock and no synchronous sweep over a feed-forward depth index.
+    The initial source emits at t=0. Every target integrates all writes that
+    arrive at the same instant before thresholding; newly firing targets then
+    schedule only future writes because every route delay is at least one.
+    There is no layer clock or synchronous feed-forward depth sweep.
     """
     if not 0 <= initial_source < n_compartments:
         raise ValueError("initial_source out of range")
 
-    compartments = [DendriticCompartment(state=0.0, leak=0.0) for _ in range(n_compartments)]
+    compartments = [
+        DendriticCompartment(state=0.0, leak=0.0)
+        for _ in range(n_compartments)
+    ]
     fired = {initial_source}
     queue: list[tuple[int, int, int, float]] = []
     events: list[dict[str, float | int]] = []
@@ -114,17 +118,30 @@ def run_async_chain(
     emit(initial_source, 0)
 
     while queue:
-        arrival, source, target, value = heappop(queue)
+        arrival = queue[0][0]
         if arrival > max_time:
             break
-        same_time = [(target, value)]
-        while queue and queue[0][0] == arrival and queue[0][2] == target:
-            _, _, target2, value2 = heappop(queue)
-            same_time.append((target2, value2))
-        drive = sum(v for _, v in same_time)
-        compartments[target].step(drive)
-        if target not in fired and ais_event(compartments[target].state, threshold):
-            fired.add(target)
+
+        batch: list[tuple[int, int, float]] = []
+        while queue and queue[0][0] == arrival:
+            _, source, target, value = heappop(queue)
+            batch.append((source, target, value))
+
+        grouped: dict[int, float] = {}
+        for _, target, value in batch:
+            grouped[target] = grouped.get(target, 0.0) + float(value)
+
+        newly_fired: list[int] = []
+        for target in sorted(grouped):
+            compartments[target].step(grouped[target])
+            if (
+                target not in fired
+                and ais_event(compartments[target].state, threshold)
+            ):
+                fired.add(target)
+                newly_fired.append(target)
+
+        for target in newly_fired:
             emit(target, arrival)
 
     return {
