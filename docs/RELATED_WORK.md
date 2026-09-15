@@ -14,7 +14,7 @@ Gidon et al. (2020), **“Dendritic action potentials and computation in human l
 
 Aizenbud et al. (2026), **“Dendritic morphology and synaptic nonlinearities enhance functional complexity in human cortical neurons”**, reported greater modeled functional complexity in human cortical pyramidal neurons and attributed important contributions to dendritic morphology and nonlinear NMDA signaling. DOI: `10.1073/pnas.2533168123`.
 
-**Boundary:** these papers motivate thinking of a branched cell as a multi-stage nonlinear computer. FusionMachine v0 does not test a biological dendrite and does not establish that its abstract modes map onto specific branches, eigenmodes, ion channels, basket cells, or chandelier cells.
+**Boundary:** these papers motivate thinking of a branched cell as a multi-stage nonlinear computer. FusionMachine does not establish that its abstract modes map onto specific branches, eigenmodes, ion channels, basket cells, or chandelier cells.
 
 ## 2. Conditional computation and mixture of experts
 
@@ -36,9 +36,9 @@ The exact v0 selector contains the bilinear term
 context * (B-A).
 ```
 
-Multiplicative interactions are old and widespread. Jayakumar et al. (ICLR 2020), **“Multiplicative Interactions and Where to Find Them”**, explicitly connect multiplicative interactions to gating, attention, hypernetworks, dynamic convolutions, information-stream fusion, and conditional computation.
+Multiplicative interactions are old and widespread. Jayakumar et al. (ICLR 2020), **“Multiplicative Interactions and Where to Find Them”**, connect multiplicative interactions to gating, attention, hypernetworks, dynamic convolutions, information-stream fusion, and conditional computation.
 
-FusionMachine therefore does **not** claim that the product term is novel. v0 uses it because the complete truth table provides a clean algebraic demonstration of why an additive/affine boundary cannot contextually select independent resident modes.
+FusionMachine therefore does **not** claim that the product term is novel. v0 uses it because the complete truth table gives a clean algebraic demonstration of why an additive/affine boundary cannot contextually select independent resident modes.
 
 Hypernetworks are another close neighbor: Ha, Dai & Le (2016), **“HyperNetworks”**, arXiv:`1609.09106`, use one network to generate the parameters of another, giving context a multiplicative influence over computation.
 
@@ -46,19 +46,37 @@ Hypernetworks are another close neighbor: Ha, Dai & Le (2016), **“HyperNetwork
 
 Neural Turing Machines (Graves, Wayne & Danihelka, 2014, arXiv:`1410.5401`) showed that neural systems can learn algorithm-like procedures by coupling a controller to addressable external memory.
 
-That literature makes an important fence for the phrase “algorithmic mode.” FusionMachine v0 does not show program induction. Its A and B computations are supplied by construction. The future research question is whether separated recurrent modes can preserve the *state of different computations* and switch between them without replaying the missing history.
+That literature makes an important fence for the phrase “algorithmic mode.” FusionMachine does not yet show program induction. Its route computations are supplied by construction. The research question is whether separated recurrent modes can preserve the *state of different computations* and switch between them without losing the history each procedure needs.
 
-## 5. Resident state versus communication
+## 5. Recursive filtering, sufficient state, and predictive representations
+
+v1 is especially close to classical state estimation. Kalman (1960), **“A New Approach to Linear Filtering and Prediction Problems”**, formulates filtering recursively through a state-transition representation rather than replaying the full observation history. DOI: `10.1115/1.3662552`.
+
+The conceptual point is older and broader than Kalman filtering: a well-chosen current state can act as a sufficient summary of the relevant past for continuing a computation. FusionMachine v1's leaky scalar is an extremely simple example of such a recursively maintained sufficient statistic.
+
+Littman, Sutton & Singh (NeurIPS 2001 / NIPS 14), **“Predictive Representations of State”**, make the representational idea explicit in another direction: dynamical state can be represented by predictions of future observations rather than by a privileged hidden-state label. Their work is a useful warning that there are many valid coordinates for state; FusionMachine's named resident modes are only one possible coordinate system.
+
+**Boundary:** v1 does not invent recursive state, sufficient statistics, state-space filtering, caching, or replay. Its narrower measured result is the exact relation between one mode's persistence and the amount of omitted history that matters when that mode has been suspended.
+
+## 6. Replay, event logs, and materialized state
+
+In software architecture, event-sourced systems deliberately retain event histories so current state can be reconstructed by replay, while materialized/projected state trades storage and continual update work for fast current queries. The analogy to v1 is structural rather than a claim of direct technical novelty.
+
+A useful software-systems reference is Overeem et al. (2021), **“Improving observability in Event Sourcing systems”**, *Journal of Systems and Software* 181:111015, DOI `10.1016/j.jss.2021.111015`, which discusses event logs and replay in operational systems.
+
+FusionMachine v1's resident-versus-replay accounting should therefore be read as a tiny dynamical version of a familiar systems tradeoff: maintain current derived state continuously, or retain enough history to rebuild it later.
+
+## 7. Resident state versus communication
 
 Delta Networks (Neil, Lee, Delbruck & Liu, ICML 2017), **“Delta Networks for Optimized Recurrent Network Computation”**, transmit neural activations only when their change exceeds a threshold, exploiting temporal stability to reduce recurrent computation/communication.
 
-FusionMachine inherits from the separate NewMachine/ActiveVectorNN line the idea that resident state and published traffic need not be identical. That is established architectural territory around event-triggered and delta communication; the open question is what happens when the resident state contains multiple computational modes and the publication boundary is itself context-dependent.
+FusionMachine inherits from the separate NewMachine/ActiveVectorNN line the idea that resident state and published traffic need not be identical. That is established territory around event-triggered and delta communication; the future question is what happens when resident state contains multiple computational modes and the publication boundary is itself context-dependent.
 
-## 6. What FusionMachine is actually testing
+## 8. What FusionMachine is actually testing
 
 The project should be judged on progressively stronger claims, not on the novelty of its ingredients.
 
-### v0 claim
+### v0 claim — preserve computational identity
 
 ```text
 preserve A and B separately
@@ -70,28 +88,31 @@ select A or B exactly
 
 while early collapse to `(A+B)/2` creates a provable information loss.
 
-This is a controlled architectural identity result, not a competitive AI result.
+### v1 claim — preserve computational history
 
-### v1 target
+A dormant leaky computation may be kept current continuously, or reconstructed later from retained missed inputs. With bounded replay, switch-time error follows the mode's own persistence law. Full replay remains exact.
 
-Replace scalar A/B outputs with simultaneously evolving algorithmic states. Test whether preserving the dormant computation avoids replay/reconstruction cost after context switches.
+The useful sentence is not “resident state beats replay.” It is:
+
+> **Persistence is also a replay horizon.**
 
 ### later target
 
-Only if v1 survives strong recurrent, MoE, and equal-capacity attackers should the project add:
+Only if stronger gates survive recurrent, MoE, and equal-capacity attackers should the project add:
 
+- genuinely different temporal algorithms per mode;
 - sparse publication and predictive receivers;
 - learned formation of computational modes;
 - local credit and slow operator rewriting;
 - physically branched / dendritic substrates;
 - biological interpretations.
 
-## 7. Novelty standard
+## 9. Novelty standard
 
-A useful eventual claim would not be “neurons are two-layer networks,” “multiplicative gating works,” “experts can be routed,” or “state can be communicated sparsely.” Those are prior art.
+A useful eventual claim would not be “neurons are two-layer networks,” “multiplicative gating works,” “experts can be routed,” “recursive state summarizes history,” or “state can be communicated sparsely.” Those are prior art.
 
 The potentially distinctive object is instead:
 
 > **a shared, persistent substrate that keeps several counterfactually distinct computations alive as resident modes, allows those modes to keep evolving even while behavior ignores them, and delays nonlinear/context-dependent causal selection until the output boundary.**
 
-Whether that object is useful beyond toy constructions is the scientific question of this repository.
+Whether that object provides an advantage over generic recurrent state or explicit expert routing is the scientific question of this repository.

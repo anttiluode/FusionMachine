@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FusionMachine — resident algorithms, nonlinear boundary</title>
-  <meta name="description" content="Interactive FusionMachine v0: two resident computations remain separate until a nonlinear contextual boundary selects behavior.">
+  <meta name="description" content="Interactive FusionMachine laboratory: preserve distinct computations and their histories until a nonlinear contextual boundary selects behavior.">
   <link rel="stylesheet" href="web/style.css">
 </head>
 <body>
   <main class="shell">
     <header class="hero">
       <div>
-        <p class="eyebrow">FUSIONMACHINE · V0</p>
+        <p class="eyebrow">FUSIONMACHINE · V0 → V1</p>
         <h1>Keep the algorithms resident.<br><span>Fuse only at the causal boundary.</span></h1>
-        <p class="lede">A tiny complete truth-table experiment about <strong>same answer, different algorithm</strong>. The two internal computations can agree perfectly in the ordinary world, then diverge under intervention. The question is whether the machine preserved both.</p>
+        <p class="lede">v0 asks what happens when two computations give the same answer but use different routes. v1 asks the harder temporal question: if one route is ignored by behavior, does its computation keep moving anyway?</p>
       </div>
       <div class="result-card">
-        <div class="result-number">1.00</div>
-        <div class="result-label">nonlinear selector accuracy</div>
-        <div class="result-vs">vs 0.75 linear / collapsed</div>
+        <div class="result-number">75/80</div>
+        <div class="result-label">steps needed at α=.98 to cut lazy replay error to 10%</div>
+        <div class="result-vs">Persistence is also a replay horizon.</div>
       </div>
     </header>
 
@@ -33,7 +33,7 @@
 
     <section class="lab-grid">
       <div class="control-card card">
-        <div class="card-kicker">INPUT / CONTEXT</div>
+        <div class="card-kicker">V0 · INPUT / CONTEXT</div>
         <h2>Change the hidden world</h2>
         <p>The ordinary world obeys x₀=x₁x₂. Break that relation and the two computations become counterfactually different.</p>
 
@@ -59,7 +59,7 @@
       </div>
 
       <div class="machine-card card">
-        <div class="card-kicker">RESIDENT COMPUTATION</div>
+        <div class="card-kicker">V0 · RESIDENT COMPUTATION</div>
         <h2>Both algorithms exist before selection</h2>
         <div class="mode-row">
           <article id="mode-a" class="mode">
@@ -78,7 +78,7 @@
       </div>
 
       <div class="boundary-card card wide">
-        <div class="card-kicker">NONLINEAR CAUSAL BOUNDARY</div>
+        <div class="card-kicker">V0 · NONLINEAR CAUSAL BOUNDARY</div>
         <div class="boundary-grid">
           <div>
             <h2>Context changes which mode becomes behavior</h2>
@@ -97,7 +97,7 @@
       </div>
 
       <div id="collapsed" class="card attacker-card">
-        <div class="card-kicker">ATTACKER 1 · COLLAPSE FIRST</div>
+        <div class="card-kicker">V0 · ATTACKER 1 · COLLAPSE FIRST</div>
         <h2>Average away algorithm identity</h2>
         <div class="attacker-value" id="collapsed-value">0.0</div>
         <code>r=(A+B)/2</code>
@@ -106,7 +106,7 @@
       </div>
 
       <div id="linear-attacker" class="card attacker-card">
-        <div class="card-kicker">ATTACKER 2 · LINEAR BOUNDARY</div>
+        <div class="card-kicker">V0 · ATTACKER 2 · LINEAR BOUNDARY</div>
         <h2>Keep A and B, remove the product</h2>
         <div class="attacker-value" id="linear-value">0.0</div>
         <code>ŷ=0.5A+0.5B</code>
@@ -117,7 +117,7 @@
 
     <section class="witness card">
       <div>
-        <div class="card-kicker">INFORMATION WITNESS</div>
+        <div class="card-kicker">V0 · INFORMATION WITNESS</div>
         <h2>After collapse, no clever decoder can recover what was erased.</h2>
         <p>These two states expose the same collapsed observation <code>(r,c)=(0,−1)</code>, but demand opposite answers.</p>
       </div>
@@ -130,7 +130,7 @@
     <section class="truth card">
       <div class="truth-head">
         <div>
-          <div class="card-kicker">COMPLETE INTERVENTION WORLD</div>
+          <div class="card-kicker">V0 · COMPLETE INTERVENTION WORLD</div>
           <h2>All 16 states — no sampling trick</h2>
         </div>
         <p>The highlighted row is the current machine state.</p>
@@ -143,17 +143,69 @@
       </div>
     </section>
 
+    <section id="v1-lab" class="v1-lab card">
+      <div class="v1-head">
+        <div>
+          <div class="card-kicker">V1 · RESIDENT ALGORITHMIC STATE</div>
+          <h2>The dormant computation still has a history.</h2>
+          <p>During an 80-step interval behavior looks at route A. Route B can either keep updating continuously, or stop and later reconstruct itself from a retained tail of missed drives.</p>
+        </div>
+        <div class="v1-equation">
+          <code>hₜ = αhₜ₋₁ + (1−α)uₜ</code>
+          <code>RMSE² = (1−α)² α²ᴷ (1−α²⁽ᴺ⁻ᴷ⁾)/(1−α²)</code>
+        </div>
+      </div>
+
+      <div class="v1-controls">
+        <label for="v1-alpha">persistence α <output id="v1-alpha-out">0.95</output></label>
+        <input id="v1-alpha" type="range" min="0.50" max="0.98" step="0.01" value="0.95">
+        <label for="v1-k">remembered dormant tail K of 80 <output id="v1-k-out">16</output></label>
+        <input id="v1-k" type="range" min="0" max="80" step="1" value="16">
+      </div>
+
+      <div id="v1-tape" class="v1-tape" aria-label="80-step dormant history"></div>
+      <div class="v1-legend"><span><i class="forgotten-dot"></i> omitted history</span><span><i class="remembered-dot"></i> retained for replay</span></div>
+
+      <div class="v1-metrics">
+        <div><span>analytic switch RMSE</span><strong id="v1-rmse">0.070427</strong></div>
+        <div><span>fraction of zero-history error</span><strong id="v1-ratio">44.0%</strong></div>
+        <div><span>K for ≤10% error at this α</span><strong id="v1-horizon">45 / 80</strong></div>
+        <div><span>switch-time lazy work</span><strong id="v1-switch-cost">16 replay updates</strong></div>
+      </div>
+
+      <div class="v1-policy-grid">
+        <div class="v1-policy resident-policy">
+          <span>RESIDENT DUAL</span>
+          <strong>pay while time passes</strong>
+          <p id="v1-resident-status"></p>
+        </div>
+        <div class="v1-policy lazy-policy">
+          <span>BOUNDED REPLAY</span>
+          <strong>pay when context switches</strong>
+          <p id="v1-lazy-status"></p>
+        </div>
+      </div>
+
+      <div class="v1-wall">
+        <span>V1 WALL SENTENCE</span>
+        <strong>Persistence is also a replay horizon.</strong>
+        <p>A slowly forgetting computation retains old events. If you stop updating it, those same old events must remain available to reconstruct where the computation should be now.</p>
+      </div>
+    </section>
+
     <section class="boundary-note">
-      <strong>Claim boundary:</strong> this page mirrors a two-bit algebraic construction. It is <strong>not a biological-neuron claim</strong>, not evidence that arbitrary programs live in dendrites, and not a performance claim over mixture-of-experts systems. The checked-in Python receipt is the scientific authority.
+      <strong>Claim boundary:</strong> v0 is an exact algebraic construction and v1 is a first-order state/replay experiment. This is <strong>not a biological-neuron claim</strong>, not evidence that arbitrary programs live in dendrites, and not a performance claim over mixture-of-experts or generic recurrent systems. Full replay is explicitly exact when complete history and switch latency are allowed. The checked-in Python receipts remain the scientific authority.
     </section>
 
     <footer>
       <a href="README.md">README</a>
       <a href="PAPER.md">paper</a>
-      <a href="RESULTS_V0.md">frozen result</a>
+      <a href="RESULTS_V0.md">v0 result</a>
+      <a href="RESULTS_V1.md">v1 result</a>
       <a href="docs/RELATED_WORK.md">related work</a>
     </footer>
   </main>
   <script src="web/app.js" defer></script>
+  <script src="web/v1.js" defer></script>
 </body>
 </html>

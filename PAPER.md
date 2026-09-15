@@ -1,42 +1,49 @@
-# FusionMachine v0: Separated Computational Modes and a Nonlinear Causal Boundary
+# FusionMachine: Separated Computational Modes, Resident Algorithmic State, and a Nonlinear Causal Boundary
 
 ## Abstract
 
-A vector representation is usually interpreted as data or features. FusionMachine asks a different question: can separated coordinates represent the simultaneous outputs of counterfactually distinct computations, with a later nonlinear/contextual boundary deciding which computation becomes behavior? We study the smallest exact construction. Two algorithms, a direct route `A=x0` and a relational route `B=x1*x2`, are made behaviorally indistinguishable in a correlated world where `x0=x1*x2`. We then break the correlation and require a context bit to select A or B. Keeping the resident representation `[A,B]` permits exact selection through one multiplicative interaction. The best affine readout of `[A,B,context]` has mean-squared error 0.5 and 75% sign accuracy on the complete truth table. Collapsing the representation to `(A+B)/2` also has irreducible MSE 0.5 and 75% accuracy, with an explicit pair of states proving information loss. The result does not show that biological dendrites store arbitrary algorithms. It establishes a narrower architectural point: preserving computational identity until a nonlinear causal boundary can retain distinctions that immediate averaging destroys.
+FusionMachine studies a simple architectural question: what changes when a vector is allowed to contain the states of several distinct computations, rather than a single blended representation, and context-dependent nonlinear selection is delayed until an output boundary?
+
+v0 gives an exact static construction. A direct computation `A=x0` and a relational computation `B=x1*x2` are behaviorally indistinguishable in a correlated world where `x0=x1*x2`. Once that relation is broken, a context bit must select A or B. Keeping `[A,B]` separate permits exact selection through one multiplicative interaction. The best affine readout of `[A,B,context]` has MSE `0.5` and 75% sign accuracy, and collapsing to `(A+B)/2` creates an explicit information-theoretic ambiguity with the same aggregate result.
+
+v1 makes each route stateful. A dormant leaky computation can either be kept resident or suspended and reconstructed later from retained history. For an 80-step hidden interval, bounded replay has a closed-form switch-error variance. Across 4,096 deterministic random tapes and four persistence values, measured replay RMSE matches the analytic law to within 1.664% at the worst nonzero point. The number of recent steps needed to reduce reconstruction RMSE to 10% of the zero-history value rises from 4 at `alpha=0.50` to 75 at `alpha=0.98`. Thus the same persistence that preserves old information also lengthens the history needed to reconstruct a suspended computation.
+
+These experiments do not show that biological dendrites contain arbitrary programs, nor that FusionMachine outperforms standard recurrent or mixture-of-experts systems. They establish a narrower progression: preserve computational identity before context arrives; when those computations have history, preserve their sufficient state or the history needed to recover it.
 
 ## 1. Motivation
 
-Several otherwise different systems share an abstract structure:
+A conventional neural representation is usually described as data: features, activations, embeddings, or hidden state. But a state variable in a dynamical machine can also be the partially executed state of a computation. If several such computations coexist, immediate averaging may destroy a distinction that becomes important only after a later context or intervention.
 
-1. a substrate carries more internal state than is externally visible;
-2. distinct internal modes can have different causal or counterfactual meanings;
-3. a context-dependent operation determines which internal distinction matters now;
-4. averaging or purification can destroy alternatives before the context is known.
-
-This suggests treating a resident vector not only as a feature embedding, but as a container for several computations that have not yet been collapsed into one behavioral answer.
-
-The first question is deliberately tiny:
-
-> Can two computations that look identical in the ordinary data distribution remain separately available for a later context-dependent choice?
-
-## 2. Formal construction
-
-Let the inputs be
+This motivates three separations:
 
 ```text
-x0, x1, x2 in {-1,+1}.
+resident computation    what continues to exist internally
+contextual fusion       which resident distinction matters now
+causal publication      what becomes behavior / downstream influence
 ```
 
-Define two computations:
+The motivating biological image is a branched cell whose local states coexist before nonlinear somatic/AIS integration, but the experiments here are ordinary digital constructions. The biological analogy supplies questions, not validation.
+
+## 2. v0 — same answer, different algorithm
+
+### 2.1 Two computations
+
+Let
+
+```text
+x0, x1, x2 in {-1,+1}
+```
+
+and define
 
 ```text
 A(x) = x0
 B(x) = x1*x2.
 ```
 
-They are counterfactually distinct because they depend on different input relations.
+They are counterfactually distinct: A depends on one direct cue, while B depends on a relation between two other cues.
 
-### 2.1 Correlated world
+### 2.2 Correlated world
 
 Impose
 
@@ -44,17 +51,11 @@ Impose
 x0 = x1*x2.
 ```
 
-Then
+Then `A(x)=B(x)` for every observed state. A behavior-only observer cannot infer which computation generated the answer.
 
-```text
-A(x) = B(x)
-```
+### 2.3 Intervention world
 
-for every observed state. Any learner evaluated only on this distribution can fit the behavior without being forced to distinguish the two computations.
-
-### 2.2 Intervention world
-
-Remove the constraint and allow all eight input triples. Add
+Remove the constraint and allow all eight input triples. Add context
 
 ```text
 c in {-1,+1}
@@ -67,115 +68,81 @@ c=-1 -> y=A
 c=+1 -> y=B.
 ```
 
-There are 16 complete intervention rows.
-
-The separated resident representation is
+There are 16 complete intervention rows. The separated resident representation is
 
 ```text
 z = [A,B].
 ```
 
-The collapsed representation is
+### 2.4 Exact nonlinear boundary
 
-```text
-r = (A+B)/2.
-```
-
-## 3. Exact nonlinear causal boundary
-
-The target selector can be written exactly as
+The selector is
 
 ```text
 y = 0.5*(A+B) + 0.5*c*(B-A).
 ```
 
-The first term is the context-free average. The second term is a multiplicative context-by-mode interaction. When `c=-1`, the expression reduces to A; when `c=+1`, it reduces to B.
+The first term is the context-free average. The second is a multiplicative context-by-mode interaction. It switches the causal meaning of the same resident vector without erasing either coordinate.
 
-This is the smallest sense in which v0 uses the phrase *nonlinear causal boundary*: the resident computations remain distinct up to the point where context decides which one becomes the external answer.
+## 3. v0 attackers
 
-## 4. Linear attacker
+### 3.1 Best affine readout
 
-Consider the best affine predictor
+Consider
 
 ```text
 y_hat = w0 + wA*A + wB*B + wc*c.
 ```
 
-Under the complete uniform intervention table, the exact target is
+On the complete symmetric truth table the interaction `c*(B-A)` lies outside the affine feature span `{1,A,B,c}`. Least squares returns
 
 ```text
-y = 0.5*A + 0.5*B + 0.5*c*(B-A).
+y_linear = 0.5*A + 0.5*B
 ```
 
-The interaction term `c*(B-A)` is orthogonal to the affine feature span generated by `{1,A,B,c}` on the complete symmetric truth table. Therefore the least-squares projection is
+with context coefficient zero. The residual is
 
 ```text
-y_linear = 0.5*A + 0.5*B.
+r = 0.5*c*(B-A).
 ```
 
-The residual is
+Since A and B disagree on half the rows, the exact mean squared error is `0.5`; with a fixed sign tie rule, accuracy is `0.75`.
 
-```text
-r_linear = 0.5*c*(B-A).
-```
+### 3.2 Early collapse
 
-Because A and B disagree on half of the states, `(B-A)^2` is 4 on half the rows and 0 on half. Hence
-
-```text
-E[r_linear^2] = 0.25 * 2 = 0.5.
-```
-
-The deterministic sign accuracy is 75%: all agreement rows are correct, while only half of the zero-valued predictions on disagreement rows can be resolved correctly by a fixed tie rule.
-
-The experiment recovers exactly these values.
-
-## 5. Collapse attacker and information witness
-
-Suppose a system destroys mode identity before the boundary and retains only
+Suppose the machine destroys computational identity and keeps only
 
 ```text
 r = (A+B)/2.
 ```
 
-When A and B disagree, `r=0` regardless of which algorithm carries +1 or -1.
-
-The frozen receipt contains the explicit pair
+When A and B disagree, `r=0` regardless of which computation carries +1 or -1. The frozen witness is
 
 ```text
-state 1: A=-1, B=+1, c=-1 -> target=-1
-state 2: A=+1, B=-1, c=-1 -> target=+1
+A=-1, B=+1, c=-1 -> target=-1
+A=+1, B=-1, c=-1 -> target=+1.
 ```
 
-Both expose exactly the same collapsed observation
+Both expose `(r,c)=(0,-1)`. No deterministic downstream function of the collapsed state can solve both cases. The complete-data optimum again has MSE `0.5` and sign accuracy `0.75`.
+
+### 3.3 Factorized calibration
+
+If the correct nonlinear basis is supplied,
 
 ```text
-(r,c) = (0,-1)
+y = w_sum*(A+B) + w_gate*c*(B-A),
 ```
 
-but require opposite outputs. No deterministic function of `(r,c)` can solve both states. This is an information-theoretic obstruction, not an optimization failure.
-
-The full-data minimum-MSE lookup over `(r,c)` therefore also reaches MSE 0.5 and 75% sign accuracy.
-
-## 6. Two-row factorized calibration
-
-To separate representation reuse from a fully hard-coded output, we fit only the coefficients of the two known mechanistic basis terms:
+one agreement row and one disagreement row identify
 
 ```text
-y = w_sum*(A+B) + w_gate*c*(B-A).
+w_sum = 0.5
+w_gate = 0.5,
 ```
 
-One calibration row with `A=B=+1` identifies `w_sum`. One row with `A=-1`, `B=+1`, `c=-1` identifies `w_gate`. Least squares recovers
+which then solves all 16 rows exactly. This is a representation-reuse diagnostic, not a general few-shot-learning result.
 
-```text
-w_sum  = 0.5
-w_gate = 0.5
-```
-
-and gives zero error across all 16 rows.
-
-This is deliberately not presented as a generic few-shot-learning result. The correct nonlinear factorization is supplied in advance. Its role is to show that once the representation has preserved both computations, only a very small amount of evidence is needed to calibrate the already-correct interaction family.
-
-## 7. Results
+### 3.4 v0 result
 
 | model | MSE | sign accuracy |
 |---|---:|---:|
@@ -184,58 +151,233 @@ This is deliberately not presented as a generic few-shot-learning result. The co
 | collapsed full-data attacker | 0.500000 | 0.750 |
 | two-row calibrated factorized boundary | **0.000000** | **1.000** |
 
-The ordinary correlated world has 100% A/B agreement. The intervention world has 50% A/B disagreement.
+v0 therefore earns:
 
-## 8. Interpretation
+> **Preserving computational identity until context arrives can be necessary; an earlier collapse can destroy that identity irreversibly.**
 
-The result is not that “nonlinearity is powerful”; that is established. The useful architectural statement is more specific:
+## 4. v1 — from algorithm output to algorithmic state
 
-> **Preserving computational identity until context arrives can be necessary. A nonlinear boundary can exploit that preserved identity, whereas an earlier collapse can destroy it irreversibly.**
+v0 still stores only scalar outputs of hand-defined computations. v1 asks what happens when each route has temporal state.
 
-The distinction between *data* and *algorithm* is also deliberately softened. In v0 the vector contains the outputs of two computations. In a recurrent extension, each mode can contain the evolving state of a computation. A resident vector can then simultaneously be representation, memory, and partially executed procedure.
-
-## 9. Relation to a neuron analogy
-
-The motivating analogy is a branched cell in which separated dendritic states coexist and a soma/AIS-like boundary supplies nonlinear integration and causal publication. v0 does **not** test that biology. The same mathematics can be implemented in ordinary digital software and belongs equally to conditional computation and multiplicative gating.
-
-Biology becomes scientifically relevant only if later gates replace abstract resident modes with a physically motivated branched substrate and retain the computational advantage under matched controls.
-
-## 10. Limitations
-
-v0 has strong simplifications:
-
-- A and B are hand-defined static computations;
-- the representation is handed both algorithm outputs;
-- the correct context signal is supplied;
-- the factorized nonlinear basis is known;
-- there is no persistence, hidden state, noise, learning of modes, bandwidth cost, or structural adaptation;
-- an unrestricted MLP or explicit expert router can of course represent the truth table.
-
-The purpose of v0 is not benchmark performance. It is to lock down the minimal object and its exact failure modes.
-
-## 11. Next experiment: dynamical algorithms
-
-The stronger test replaces A and B with stateful algorithms:
+For route drive `u_t`, define
 
 ```text
-hA(t+1) = FA(hA(t), u(t))
-hB(t+1) = FB(hB(t), u(t)).
+h_t = alpha*h_(t-1) + (1-alpha)*u_t.
 ```
 
-Both states evolve continuously. Context chooses only which state becomes behavior. The key attacker keeps only the currently selected state alive.
+The two route drives retain the v0 semantics:
 
-After a long period in context A, switch abruptly to context B. A resident multimode machine should already have `hB` at the state implied by the entire hidden history. A selected-only machine must reconstruct or replay the missing computation.
+```text
+uA_t = x0_t
+uB_t = x1_t*x2_t.
+```
 
-That gate will test the stronger idea suggested by the broader project lineage:
+Now the resident vector is
 
-> **an internal mode can be algorithmic state, not merely an algorithm's current scalar output.**
+```text
+z_t = [hA_t, hB_t]
+```
 
-## 12. Reproducibility
+and the same causal boundary can select either continuing state:
+
+```text
+y_t = 0.5*(hA_t+hB_t) + 0.5*c_t*(hB_t-hA_t).
+```
+
+The stronger claim is not that the coordinate *names* an algorithm, but that it contains a sufficient state from which that computation can continue correctly.
+
+## 5. Resident versus lazy computation
+
+Consider an 80-step interval during which context selects A while hidden B-drives continue to occur. Every policy knows the same B-state at the beginning of the gap.
+
+### Resident dual
+
+B is updated on every hidden step. At the switch to B, its state is already current.
+
+### Lazy zero-history
+
+B is suspended. The known boundary state is decayed correctly across the gap, but all missed B-drives are unknown and therefore omitted.
+
+### Bounded replay K
+
+The machine stores only the last `K` missed B-drives. At switch time it analytically decays the known boundary state across the full gap and adds the exact recurrence contributions of those retained drives.
+
+### Full replay
+
+`K=N=80` stores every missed drive and exactly reproduces resident B. This is a deliberately privileged attacker and prevents the experiment from pretending that continuous resident computation creates information from nothing.
+
+## 6. Closed-form replay error
+
+Let the hidden dormant drives be iid Rademacher variables. If only the last `K` of `N` missed drives are retained, the omitted contribution is
+
+```text
+e = (1-alpha) * sum_(r=K)^(N-1) alpha^r u_(N-r).
+```
+
+Because the drives have zero mean and unit variance,
+
+```text
+E[e] = 0
+```
+
+and
+
+```text
+Var[e]
+ = (1-alpha)^2 * sum_(r=K)^(N-1) alpha^(2r)
+ = (1-alpha)^2 * alpha^(2K)
+   * (1-alpha^(2(N-K))) / (1-alpha^2).
+```
+
+The predicted switch RMSE is the square root of this expression. For a gap long compared with the mode lifetime, the dominant dependence is approximately
+
+```text
+RMSE(K) proportional to alpha^K.
+```
+
+This yields a direct conceptual bridge to modal forgetting: the mode's own persistence determines how far into the missed past one must reach to reconstruct it.
+
+## 7. v1 experiment
+
+We sample 4,096 deterministic independent hidden tapes of length 80 and sweep
+
+```text
+alpha = 0.50, 0.80, 0.95, 0.98
+K     = 0, 4, 8, 16, 32, 64, 80.
+```
+
+The Monte Carlo estimator computes the exact omitted-prefix contribution directly, avoiding catastrophic cancellation once replay error becomes tiny.
+
+Across every nonzero sweep point, the largest relative difference between measured and analytic RMSE is **1.664%**, at `alpha=0.98, K=4`.
+
+### 7.1 Primary alpha=0.95 curve
+
+| K | measured RMSE | analytic RMSE |
+|---:|---:|---:|
+| 0 | 0.160939 | 0.160106 |
+| 4 | 0.131933 | 0.130399 |
+| 8 | 0.106385 | 0.106199 |
+| 16 | 0.070331 | 0.070427 |
+| 32 | 0.030810 | 0.030906 |
+| 64 | 0.005413 | 0.005395 |
+| 80 | **0.000000** | **0.000000** |
+
+### 7.2 Persistence sets the reconstruction horizon
+
+Define the replay horizon as the smallest `K` whose analytic RMSE is at most 10% of the zero-history RMSE.
+
+| alpha | K required out of 80 |
+|---:|---:|
+| 0.50 | **4** |
+| 0.80 | **11** |
+| 0.95 | **45** |
+| 0.98 | **75** |
+
+This gives the compact result:
+
+> **Persistence is also a replay horizon.**
+
+A rapidly forgetting computation can be recovered from a short recent tail because older events no longer matter. A slowly forgetting computation preserves older distinctions, and therefore suspending it makes those same old events necessary for accurate reconstruction.
+
+## 8. Computation has not disappeared — it moved in time
+
+The resident and full-replay policies perform the same recurrence work at different times.
+
+For the 80-step dormant interval:
+
+| policy | dormant updates during gap | hidden drives stored | switch replay updates | current state scalars |
+|---|---:|---:|---:|---:|
+| resident dual | **80** | **0** | **0** | 1 |
+| lazy full replay | **0** | **80** | **80** | 1 |
+
+Thus v1 is not an efficiency theorem. It exposes a scheduling/storage/readiness tradeoff:
+
+```text
+resident state
+    continuous local work
+    compact current sufficient state
+    zero switch replay latency
+
+lazy replay
+    deferred local work
+    retained missed history
+    switch-time reconstruction burst
+```
+
+A bounded-history lazy machine interpolates between those extremes and accepts the error given by the analytic law.
+
+## 9. Interpretation
+
+v0 and v1 together suggest a more precise meaning of “algorithmic mode.”
+
+A mode has at least two parts:
+
+```text
+identity     what counterfactual computation this route represents
+state        where that continuing computation currently is
+```
+
+A system that preserves identity but lets the dormant state stop evolving has not actually preserved the full computation. It has preserved only a label or checkpoint. To resume exactly, it needs the missing inputs or an equivalent sufficient statistic.
+
+This is why the data/program distinction becomes blurry in the emerging machine. A coordinate can simultaneously be:
+
+- a representation of past input;
+- a sufficient statistic for future prediction;
+- memory;
+- the current state of a procedure.
+
+## 10. Relation to established ideas
+
+The ingredients are not new in isolation. v0 lives near multiplicative gating and conditional computation. v1 lives near recursive filtering, sufficient statistics, caching/materialized state, lazy evaluation, replay, and state-space models. Mixture-of-experts architectures provide an obvious strong alternative when computations are explicitly separated. Recurrent networks provide an obvious attacker when one generic state might encode all needed histories without named modes.
+
+FusionMachine's scientific question is therefore narrower than “can neural networks route experts?” or “can recurrent state remember history?” It is:
+
+> **When does preserving several counterfactually distinct computations as continuing resident state provide a useful coordinate system or computational advantage over immediately blended generic state?**
+
+## 11. Biological interpretation boundary
+
+A branched dendritic arbor motivates the picture of locally persistent computational states meeting a nonlinear soma/AIS boundary. Real dendritic branches are known to exhibit nonlinear integration, and neuronal structure can create different temporal filters and local states. None of the v0-v1 results establish that biological branches implement the abstract A/B modes, that the AIS acts as the exact context gate here, or that spikes are merely publication packets.
+
+A biological mapping becomes meaningful only if later gates replace abstract state coordinates with a physically constrained branched substrate and the same computational distinctions survive matched controls.
+
+## 12. Limitations
+
+The current experiments remain deliberately small:
+
+- A and B are hand-defined input computations;
+- v1 gives both routes the same first-order recurrence family;
+- context is supplied explicitly;
+- hidden v1 drives are iid and exactly available when retained;
+- full replay is allowed unlimited switch latency;
+- there is no task-trained formation of routes;
+- there is no equal-capacity generic recurrent attacker yet;
+- there is no hardware energy or communication model;
+- there is no biological validation.
+
+The point is to make the object fail cleanly before scaling it.
+
+## 13. Next experiment — genuinely different temporal algorithms
+
+The critical v2 test should no longer let both resident routes be copies of the same exponential filter.
+
+A useful pair would be computationally incompatible temporal mechanisms, for example:
+
+```text
+route A: continuous leaky/integrating predictor
+route B: finite-state relational/parity/event procedure
+```
+
+Both must continue through periods when they are behaviorally irrelevant. Context switches should reveal whether the dormant procedure remains at the correct internal state.
+
+The strongest attacker should receive the same total number of state scalars but use them as an unconstrained generic recurrent state. If that model matches or beats separated resident modes, then FusionMachine's named-mode picture may be explanatory rather than computationally privileged. That is an important possible negative result.
+
+## 14. Reproducibility
 
 ```bash
 python -m pip install -e ".[test]"
 pytest -q
 python -m experiments.run_v0 --out /tmp/v0.json
+python -m experiments.run_v1 --out /tmp/v1.json
 ```
 
-The canonical receipt is checked into `results/v0.json` and regression-tested against fresh generation.
+Canonical receipts live in `results/v0.json` and `results/v1.json` and are regenerated in CI.
