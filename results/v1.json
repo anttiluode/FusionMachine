@@ -1,0 +1,271 @@
+{
+  "alphas": [
+    0.5,
+    0.8,
+    0.95,
+    0.98
+  ],
+  "analytic_audit": {
+    "location": {
+      "alpha": 0.98,
+      "k": 4
+    },
+    "max_relative_discrepancy": 0.016643218517
+  },
+  "gap": 80,
+  "interpretation": "resident state trades continuous local updates for immediate readiness; bounded replay trades readiness for retained history and switch-time reconstruction",
+  "primary_alpha_0.95": [
+    {
+      "analytic_rmse": 0.160106314231,
+      "k": 0,
+      "measured_rmse": 0.160938752967,
+      "relative_discrepancy": 0.005199287359
+    },
+    {
+      "analytic_rmse": 0.13039856788,
+      "k": 4,
+      "measured_rmse": 0.131932590713,
+      "relative_discrepancy": 0.011764107983
+    },
+    {
+      "analytic_rmse": 0.106199366344,
+      "k": 8,
+      "measured_rmse": 0.10638549945,
+      "relative_discrepancy": 0.001752676244
+    },
+    {
+      "analytic_rmse": 0.070427035686,
+      "k": 16,
+      "measured_rmse": 0.070331021578,
+      "relative_discrepancy": 0.001363313213
+    },
+    {
+      "analytic_rmse": 0.030905721659,
+      "k": 32,
+      "measured_rmse": 0.030810390636,
+      "relative_discrepancy": 0.003084575212
+    },
+    {
+      "analytic_rmse": 0.005395400302,
+      "k": 64,
+      "measured_rmse": 0.005413190385,
+      "relative_discrepancy": 0.003297268414
+    },
+    {
+      "analytic_rmse": 0.0,
+      "k": 80,
+      "measured_rmse": 0.0,
+      "relative_discrepancy": 0.0
+    }
+  ],
+  "replay_horizon_for_10pct_of_zero_history_rmse": {
+    "0.50": 4,
+    "0.80": 11,
+    "0.95": 45,
+    "0.98": 75
+  },
+  "replay_windows": [
+    0,
+    4,
+    8,
+    16,
+    32,
+    64,
+    80
+  ],
+  "rng_seed": 20260915,
+  "seeds": 4096,
+  "sweep": {
+    "0.50": [
+      {
+        "analytic_rmse": 0.57735026919,
+        "k": 0,
+        "measured_rmse": 0.574370196078,
+        "relative_discrepancy": 0.005161638039
+      },
+      {
+        "analytic_rmse": 0.036084391824,
+        "k": 4,
+        "measured_rmse": 0.036286983254,
+        "relative_discrepancy": 0.00561437838
+      },
+      {
+        "analytic_rmse": 0.002255274489,
+        "k": 8,
+        "measured_rmse": 0.002253588562,
+        "relative_discrepancy": 0.000747548267
+      },
+      {
+        "analytic_rmse": 8.809666e-06,
+        "k": 16,
+        "measured_rmse": 8.718654e-06,
+        "relative_discrepancy": 0.010330873155
+      },
+      {
+        "analytic_rmse": 1.34e-10,
+        "k": 32,
+        "measured_rmse": 1.34e-10,
+        "relative_discrepancy": 0.003263495734
+      },
+      {
+        "analytic_rmse": 0.0,
+        "k": 64,
+        "measured_rmse": 0.0,
+        "relative_discrepancy": 0.007506021735
+      },
+      {
+        "analytic_rmse": 0.0,
+        "k": 80,
+        "measured_rmse": 0.0,
+        "relative_discrepancy": 0.0
+      }
+    ],
+    "0.80": [
+      {
+        "analytic_rmse": 0.333333333333,
+        "k": 0,
+        "measured_rmse": 0.332510968765,
+        "relative_discrepancy": 0.002467093705
+      },
+      {
+        "analytic_rmse": 0.136533333333,
+        "k": 4,
+        "measured_rmse": 0.137541266126,
+        "relative_discrepancy": 0.007382320258
+      },
+      {
+        "analytic_rmse": 0.055924053333,
+        "k": 8,
+        "measured_rmse": 0.055948742201,
+        "relative_discrepancy": 0.000441471347
+      },
+      {
+        "analytic_rmse": 0.009382499224,
+        "k": 16,
+        "measured_rmse": 0.009304442047,
+        "relative_discrepancy": 0.008319444006
+      },
+      {
+        "analytic_rmse": 0.000264093875,
+        "k": 32,
+        "measured_rmse": 0.000262124711,
+        "relative_discrepancy": 0.007456304172
+      },
+      {
+        "analytic_rmse": 2.09154e-07,
+        "k": 64,
+        "measured_rmse": 2.10136e-07,
+        "relative_discrepancy": 0.004698250584
+      },
+      {
+        "analytic_rmse": 0.0,
+        "k": 80,
+        "measured_rmse": 0.0,
+        "relative_discrepancy": 0.0
+      }
+    ],
+    "0.95": [
+      {
+        "analytic_rmse": 0.160106314231,
+        "k": 0,
+        "measured_rmse": 0.160938752967,
+        "relative_discrepancy": 0.005199287359
+      },
+      {
+        "analytic_rmse": 0.13039856788,
+        "k": 4,
+        "measured_rmse": 0.131932590713,
+        "relative_discrepancy": 0.011764107983
+      },
+      {
+        "analytic_rmse": 0.106199366344,
+        "k": 8,
+        "measured_rmse": 0.10638549945,
+        "relative_discrepancy": 0.001752676244
+      },
+      {
+        "analytic_rmse": 0.070427035686,
+        "k": 16,
+        "measured_rmse": 0.070331021578,
+        "relative_discrepancy": 0.001363313213
+      },
+      {
+        "analytic_rmse": 0.030905721659,
+        "k": 32,
+        "measured_rmse": 0.030810390636,
+        "relative_discrepancy": 0.003084575212
+      },
+      {
+        "analytic_rmse": 0.005395400302,
+        "k": 64,
+        "measured_rmse": 0.005413190385,
+        "relative_discrepancy": 0.003297268414
+      },
+      {
+        "analytic_rmse": 0.0,
+        "k": 80,
+        "measured_rmse": 0.0,
+        "relative_discrepancy": 0.0
+      }
+    ],
+    "0.98": [
+      {
+        "analytic_rmse": 0.098500814454,
+        "k": 0,
+        "measured_rmse": 0.099907974339,
+        "relative_discrepancy": 0.014285769036
+      },
+      {
+        "analytic_rmse": 0.090526052779,
+        "k": 4,
+        "measured_rmse": 0.092032697657,
+        "relative_discrepancy": 0.016643218517
+      },
+      {
+        "analytic_rmse": 0.083141376185,
+        "k": 8,
+        "measured_rmse": 0.083669049021,
+        "relative_discrepancy": 0.00634669356
+      },
+      {
+        "analytic_rmse": 0.06995104888,
+        "k": 16,
+        "measured_rmse": 0.069799752837,
+        "relative_discrepancy": 0.002162884552
+      },
+      {
+        "analytic_rmse": 0.048720204994,
+        "k": 32,
+        "measured_rmse": 0.048619591554,
+        "relative_discrepancy": 0.002065127601
+      },
+      {
+        "analytic_rmse": 0.019033034168,
+        "k": 64,
+        "measured_rmse": 0.019093997835,
+        "relative_discrepancy": 0.003203045135
+      },
+      {
+        "analytic_rmse": 0.0,
+        "k": 80,
+        "measured_rmse": 0.0,
+        "relative_discrepancy": 0.0
+      }
+    ]
+  },
+  "version": "v1",
+  "work_accounting_gap_80": {
+    "lazy_full_replay": {
+      "dormant_updates_during_gap": 0,
+      "resident_state_scalars": 1,
+      "stored_dormant_drives": 80,
+      "switch_replay_updates": 80
+    },
+    "resident_dual": {
+      "dormant_updates_during_gap": 80,
+      "resident_state_scalars": 1,
+      "stored_dormant_drives": 0,
+      "switch_replay_updates": 0
+    }
+  }
+}
