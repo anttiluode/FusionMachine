@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, fusion-v0]
+    branches: [main, fusion-v0, fusion-v1-resident-state]
   pull_request:
 
 jobs:
@@ -21,7 +21,9 @@ jobs:
         run: python -m pip install -e '.[test]'
       - name: Test
         run: pytest -q
-      - name: Rebuild frozen v0 receipt
+      - name: Rebuild frozen receipts
         run: |
           python -m experiments.run_v0 --out /tmp/v0.json
           cmp /tmp/v0.json results/v0.json
+          python -m experiments.run_v1 --out /tmp/v1.json
+          cmp /tmp/v1.json results/v1.json
