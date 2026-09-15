@@ -6,6 +6,7 @@ def test_root_page_exposes_the_fusion_machine_controls_and_panels():
     assert 'href="web/style.css"' in html
     assert 'src="web/app.js"' in html
     assert 'src="web/v1.js"' in html
+    assert 'src="web/v2.js"' in html
     for control in ("x0", "x1", "x2", "context"):
         assert f'id="{control}"' in html
     for panel in ("mode-a", "mode-b", "collapsed", "publication", "linear-attacker"):
@@ -22,6 +23,23 @@ def test_v1_page_exposes_resident_replay_controls_and_readiness_accounting():
     assert 'id="v1-horizon"' in html
     assert "persistence is also a replay horizon" in html.lower()
     assert "full replay is explicitly exact" in html.lower()
+
+
+def test_v2_page_exposes_dendrite_ais_axon_routing_lab():
+    html = Path("index.html").read_text()
+    for element in (
+        "v2-lab",
+        "v2-source",
+        "v2-ais-gate",
+        "v2-pulse",
+        "v2-route-mode",
+        "v2-targets",
+        "v2-reroute",
+        "v2-step",
+    ):
+        assert f'id="{element}"' in html
+    assert "one-bit event" in html.lower()
+    assert "address lives in the route" in html.lower()
 
 
 def test_page_copy_keeps_the_scientific_claim_boundary_visible():
