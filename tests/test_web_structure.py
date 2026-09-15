@@ -4,6 +4,7 @@ from pathlib import Path
 def test_root_page_exposes_the_fusion_machine_controls_and_panels():
     html = Path("index.html").read_text()
     assert 'href="web/style.css"' in html
+    assert 'href="web/v3.css"' in html
     assert 'src="web/app.js"' in html
     assert 'src="web/v1.js"' in html
     assert 'src="web/v2.js"' in html
@@ -42,7 +43,19 @@ def test_v2_page_exposes_dendrite_ais_axon_routing_lab():
     assert "address lives in the route" in html.lower()
 
 
+def test_v3_page_exposes_fair_fight_and_confound():
+    html = Path("index.html").read_text().lower()
+    for element in ("v3-lab", "v3-budget", "v3-controls"):
+        assert f'id="{element}"' in html
+    assert "four states vs four states" in html
+    assert "state is not relevance" in html
+    assert "confounded" in html
+    assert "30 vs 46" in html
+    assert "1,088" in html
+
+
 def test_page_copy_keeps_the_scientific_claim_boundary_visible():
-    html = Path("index.html").read_text()
-    assert "same answer" in html.lower()
-    assert "not a biological-neuron claim" in html.lower()
+    html = Path("index.html").read_text().lower()
+    assert "same answer" in html
+    assert "not biological-neuron claims" in html
+    assert "not evidence that basket/chandelier cells implement" in html
