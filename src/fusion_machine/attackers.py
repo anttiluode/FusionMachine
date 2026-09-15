@@ -57,3 +57,32 @@ def collapse_witness(rows: list[dict[str, int]]) -> tuple[dict[str, int], dict[s
             return previous, row
         seen[key] = row
     raise ValueError("no collapse witness exists")
+
+
+def fit_factorized_boundary(
+    calibration_rows: list[dict[str, int]],
+    evaluation_rows: list[dict[str, int]],
+) -> dict[str, object]:
+    """Fit only the two mechanistic nonlinear basis terms used by the exact boundary."""
+    x_cal = np.asarray(
+        [[r["a"] + r["b"], r["context"] * (r["b"] - r["a"])] for r in calibration_rows],
+        dtype=float,
+    )
+    y_cal = np.asarray([r["target"] for r in calibration_rows], dtype=float)
+    weights, *_ = np.linalg.lstsq(x_cal, y_cal, rcond=None)
+
+    x_eval = np.asarray(
+        [[r["a"] + r["b"], r["context"] * (r["b"] - r["a"])] for r in evaluation_rows],
+        dtype=float,
+    )
+    y_eval = np.asarray([r["target"] for r in evaluation_rows], dtype=float)
+    pred = x_eval @ weights
+    mse = float(np.mean((pred - y_eval) ** 2))
+    accuracy = float(np.mean([_class_label(p) == int(t) for p, t in zip(pred, y_eval)]))
+    cleaned = [0.0 if abs(float(v)) < 1e-12 else float(round(float(v), 12)) for v in weights]
+    return {
+        "weights_sum_gate": cleaned,
+        "predictions": [float(v) for v in pred],
+        "mse": 0.0 if abs(mse) < 1e-12 else mse,
+        "accuracy": accuracy,
+    }
